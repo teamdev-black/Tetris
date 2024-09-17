@@ -104,4 +104,4 @@
 - 異なる画面サイズに対応したレイアウト調整
 
 # 参考
-(Wikipedia: テトリス)[https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%88%E3%83%AA%E3%82%B9]
+[Wikipedia: テトリス](https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%88%E3%83%AA%E3%82%B9)
