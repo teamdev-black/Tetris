@@ -1,6 +1,6 @@
 # テトリス実装 機能要件書
 
-![テトリス ワールドルール](https://upload.wikimedia.org/wikipedia/commons/3/39/Tetris_World_Rule.png)
+![テトリス ワールドルール](https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%88%E3%83%AA%E3%82%B9#/media/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB:Tetris_World_Rule.png)
 
 ## 1. 基本ゲームプレイ
 
