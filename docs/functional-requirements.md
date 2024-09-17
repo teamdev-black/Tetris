@@ -1,5 +1,7 @@
 # テトリス実装 機能要件書
 
+![テトリス ワールドルール](https://upload.wikimedia.org/wikipedia/commons/3/39/Tetris_World_Rule.png)
+
 ## 1. 基本ゲームプレイ
 
 ### 1.1 ゲームフィールド
