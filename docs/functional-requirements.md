@@ -111,3 +111,4 @@
 
 # 参考
 [Wikipedia: テトリス](https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%88%E3%83%AA%E3%82%B9)
+[Qiita: テトリス（tetris）のガイドラインを理解する](https://qiita.com/ki_ki33/items/35566f052af7b916607b)
