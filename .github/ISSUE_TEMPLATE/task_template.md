@@ -1,7 +1,7 @@
 ---
 name: タスク
 about: プロジェクトタスクを作成するためのテンプレート
-title: "# [カテゴリ] 実装する機能名"
+title: "[カテゴリ] 実装する機能名"
 labels: task
 assignees: ''
 ---
