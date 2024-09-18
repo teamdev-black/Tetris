@@ -1,5 +1,8 @@
 # テトリス実装 機能要件書
 
+![image](https://github.com/user-attachments/assets/1bf319fe-6564-4289-a5d8-70c2668bdfac)
+
+
 ## 1. 基本ゲームプレイ
 
 ### 1.1 ゲームフィールド
@@ -7,6 +10,8 @@
 - 最上部に2行の余白を設ける（新しいテトリミノの出現用）
 
 ### 1.2 テトリミノ
+![image](https://github.com/user-attachments/assets/0a4bd020-ae79-438b-aedb-a90a51f580c5)
+
 - 7種類のテトリミノ（I, O, T, S, Z, J, L）を実装
 - 各テトリミノに指定された色を使用
 - テトリミノの初期向きと回転軸をガイドラインに従って設定
@@ -102,3 +107,6 @@
 
 ### 6.4 レスポンシブデザイン
 - 異なる画面サイズに対応したレイアウト調整
+
+# 参考
+[Wikipedia: テトリス](https://ja.wikipedia.org/wiki/%E3%83%86%E3%83%88%E3%83%AA%E3%82%B9)
