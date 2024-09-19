@@ -154,7 +154,7 @@ const shiftLeft = () => {
     currentTetrimino.column--;
 }
 
-// テトリミノを右に移動する関数
+// テトリミノを右に移動させる関数
 const shiftRight = () => {
     currentTetrimino.column++;
 }
@@ -189,7 +189,7 @@ function gameLoop() {
 
 // 初期化処理
 const init = () => {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown); //初期化処理にキーボードイベントハンドラの追加
     requestAnimationFrame(gameLoop);
 };
 
