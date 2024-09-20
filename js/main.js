@@ -85,6 +85,18 @@ const drawPlayScreen = () => {
     // キャンバスを塗りつぶす
     CANVAS2D.fillRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
 
+    // 固定されたブロックを描画
+    for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
+        for (let col = 0; col < PLAYSCREENWIDTH; col++) {
+            if (field[row][col]) {
+                CANVAS2D.fillStyle = field[row][col];
+                CANVAS2D.fillRect(col * BLOCKSIZE, row * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+                CANVAS2D.strokeStyle = '#555';
+                CANVAS2D.strokeRect(col * BLOCKSIZE, row * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+            }
+        }
+    }
+
     // grid線を描画
     CANVAS2D.strokeStyle = '#555'; // grid-line color
     for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
@@ -93,6 +105,15 @@ const drawPlayScreen = () => {
         }
     }
 };
+
+// フィールドグリッドの初期化
+const field = [];
+for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
+    field[row] = [];
+    for (let col = 0; col < PLAYSCREENWIDTH; col++) {
+        field[row][col] = null; // 空のセルはnullとする
+    }
+}
 
 // テトリミノの生成順序
 let tetriminoSequence = [];
@@ -149,15 +170,54 @@ function drawTetrimino() {
     }
 }
 
+// 衝突判定を行うアロー関数
+const isCollision = (tetrimino) => {
+    const matrix = tetrimino.matrix;
+    const row = tetrimino.row;
+    const column = tetrimino.column;
+
+    for (let r = 0; r < matrix.length; r++) { // r = 行
+        for (let c = 0; c < matrix[r].length; c++) { // c = 列
+            if (matrix[r][c]) {
+                const x = column + c;
+                const y = row + r;
+
+                // テトリミノが左端または右端を超えていないか、下端を超えていないかをチェック
+                if (x < 0 || x >= PLAYSCREENWIDTH || y >= PLAYSCREENHEIGHT) {
+                    return true; // 衝突あり
+                }
+
+                // フィールドグリッドとの衝突をチェック
+                if (y >= 0 && field[y][x]) {
+                    return true; // 衝突あり
+                }
+            }
+        }
+    }
+    return false; // 衝突なし
+};
+
 // / テトリミノを左に移動させる関数
 const shiftLeft = () => {
-    currentTetrimino.column--;
-}
+    currentTetrimino.column--;// 左に移動
+    if (isCollision(currentTetrimino)) {
+        currentTetrimino.column++; // 衝突した場合は移動をキャンセル
+    } else {
+        drawPlayScreen();
+        drawTetrimino();
+    }
+};
 
 // テトリミノを右に移動させる関数
 const shiftRight = () => {
-    currentTetrimino.column++;
-}
+    currentTetrimino.column++; // 右に移動
+    if (isCollision(currentTetrimino)) {
+        currentTetrimino.column--; // 衝突した場合は移動をキャンセル
+    } else {
+        drawPlayScreen();
+        drawTetrimino();
+    }
+};
 
 // テトリミノの通常落下速度(millisec)
 const DROPSPEED = 1000;
@@ -169,10 +229,39 @@ let lastDropTime = 0;
 const normalDrop = (currentTime) => {
     // 現在時刻が最終ドロップ時刻よりもDROPSPEED経過していれば落下
     if (currentTime - lastDropTime > DROPSPEED) {
-        currentTetrimino.row++;
+        currentTetrimino.row++; //下に移動
+        if (isCollision(currentTetrimino)) {
+            currentTetrimino.row--; // 衝突した場合は移動をキャンセル
+
+             // テトリミノをフィールドに固定
+             lockTetrimino();
+
+            currentTetrimino = null; // 新しいテトリミノを生成するために現在のテトリミノをクリア
+        }
         lastDropTime = currentTime;
     }
+};
+
+
+// テトリミノをフィールドグリッドに固定する関数
+function lockTetrimino() {
+    const matrix = currentTetrimino.matrix;
+    const row = currentTetrimino.row;
+    const column = currentTetrimino.column;
+
+    matrix.forEach((rowMatrix, r) => {
+        rowMatrix.forEach((cell, c) => {
+            if (cell) {
+                const x = column + c;
+                const y = row + r;
+                if (y >= 0 && x >= 0 && x < PLAYSCREENWIDTH && y < PLAYSCREENHEIGHT) {
+                    field[y][x] = currentTetrimino.color; // 色でブロックを表現
+                }
+            }
+        });
+    });
 }
+
 function rotateTetrimino() {
     const iTetriminoSize = 4;
     
@@ -220,7 +309,17 @@ function rotateTetrimino() {
 
     // 回転後の形状を現在のテトリミノに設定
     currentTetrimino.matrix = rotatedShape;
+
+    // 回転後に衝突が発生する場合は元に戻す
+    if (isCollision(currentTetrimino)) {
+        // 元の形状に戻す
+        currentTetrimino.matrix = currentShape;
+    } else {
+        drawPlayScreen();
+        drawTetrimino();
+    }
 }
+
 // キーボードイベントハンドラの追加
 const handleKeyDown = (e) => {
     if (!currentTetrimino) return;
