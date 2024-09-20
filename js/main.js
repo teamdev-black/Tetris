@@ -173,7 +173,54 @@ const normalDrop = (currentTime) => {
         lastDropTime = currentTime;
     }
 }
+function rotateTetrimino() {
+    const iTetriminoSize = 4;
+    
+    // 現在のテトリミノの形状を取得
+    let currentShape = currentTetrimino.matrix;
+    
+    // 現在の形状の大きさ（matrixSize x matrixSize）を取得
+    let matrixSize = currentShape.length;
+    
+    // 新しい空の配列を作成（回転後の形状を格納するため）
+    let rotatedShape = [];
+    
+    // 新しい形状の配列を0で初期化
+    for (let i = 0; i < matrixSize; i++) {
+        let newRow = [];
+        for (let j = 0; j < matrixSize; j++) {
+            newRow.push(0);
+        }
+        rotatedShape.push(newRow);
+    }
+    
+    // I型テトリミノの場合は特別な回転を行う
+    if (currentTetrimino.name === 'I') {
+        // I型テトリミノが横長の場合
+        if (currentShape[1][0] === 1) {
+            // 縦長に変更
+            for (let i = 0; i < iTetriminoSize; i++) {
+                rotatedShape[i][2] = 1;
+            }
+        } else {
+            // 横長に変更
+            for (let i = 0; i < iTetriminoSize; i++) {
+                rotatedShape[1][i] = 1;
+            }
+        }
+    } else {
+        // I型以外のテトリミノの回転
+        for (let i = 0; i < matrixSize; i++) {
+            for (let j = 0; j < matrixSize; j++) {
+                // 90度回転の計算：新しい位置 = [j][matrixSize-1-i]
+                rotatedShape[j][matrixSize - 1 - i] = currentShape[i][j];
+            }
+        }
+    }
 
+    // 回転後の形状を現在のテトリミノに設定
+    currentTetrimino.matrix = rotatedShape;
+}
 // キーボードイベントハンドラの追加
 const handleKeyDown = (e) => {
     if (!currentTetrimino) return;
@@ -185,6 +232,9 @@ const handleKeyDown = (e) => {
             break;
         case "ArrowRight": //"ArrowRight"は左矢印キーの識別子になります。
             shiftRight();
+            break;
+        case "ArrowUp": // 追加: 上矢印キーで回転
+            rotateTetrimino();
             break;
     }
 }
