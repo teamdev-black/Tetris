@@ -159,6 +159,21 @@ const shiftRight = () => {
     currentTetrimino.column++;
 }
 
+// テトリミノの通常落下速度(millisec)
+const DROPSPEED = 1000;
+
+// 最後のドロップ時間を記録する変数
+let lastDropTime = 0;
+
+// テトリミノを1行落下させる関数
+const normalDrop = (currentTime) => {
+    // 現在時刻が最終ドロップ時刻よりもDROPSPEED経過していれば落下
+    if (currentTime - lastDropTime > DROPSPEED) {
+        currentTetrimino.row++;
+        lastDropTime = currentTime;
+    }
+}
+
 // キーボードイベントハンドラの追加
 const handleKeyDown = (e) => {
     if (!currentTetrimino) return;
@@ -175,21 +190,28 @@ const handleKeyDown = (e) => {
 }
 
 // ゲームループ関数
-function gameLoop() {
+// requestAnimationFlameの呼び出しにより現在の時刻:DOMHighResTimeStampがgameLoopに渡される
+// それをcurrentTimeとして受け取っている
+function gameLoop(currentTime) {  
     drawPlayScreen();
     if (currentTetrimino === null) {
         addNewTetrimino();
+        lastDropTime = currentTime;
     } else {
+        normalDrop(currentTime);
         drawTetrimino();
     }
-    console.log(currentTetrimino);
-    requestAnimationFrame(gameLoop);  // この行を追加
+
+    requestAnimationFrame(gameLoop);
 
 }
 
 // 初期化処理
 const init = () => {
     document.addEventListener('keydown', handleKeyDown); //初期化処理にキーボードイベントハンドラの追加
+    // ブラウザの描画タイミングに合わせて指定された関数を呼び出すWebAPI
+    // 描画タイミングは画面のリフレッシュレートに依存
+    // ex) 一般的なモニターは60Hz(1000ミリ秒 / 60 = 16.7)なので16.7ミリ秒間隔でgameLoopが呼び出される
     requestAnimationFrame(gameLoop);
 };
 
