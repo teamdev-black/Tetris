@@ -149,6 +149,31 @@ function drawTetrimino() {
     }
 }
 
+// / テトリミノを左に移動させる関数
+const shiftLeft = () => {
+    currentTetrimino.column--;
+}
+
+// テトリミノを右に移動させる関数
+const shiftRight = () => {
+    currentTetrimino.column++;
+}
+
+// キーボードイベントハンドラの追加
+const handleKeyDown = (e) => {
+    if (!currentTetrimino) return;
+
+    switch(e.key) {
+
+        case "ArrowLeft": //"ArrowLeft"は左矢印キーの識別子になります。
+            shiftLeft();
+            break;
+        case "ArrowRight": //"ArrowRight"は左矢印キーの識別子になります。
+            shiftRight();
+            break;
+    }
+}
+
 // ゲームループ関数
 function gameLoop() {
     drawPlayScreen();
@@ -164,6 +189,7 @@ function gameLoop() {
 
 // 初期化処理
 const init = () => {
+    document.addEventListener('keydown', handleKeyDown); //初期化処理にキーボードイベントハンドラの追加
     requestAnimationFrame(gameLoop);
 };
 
