@@ -197,27 +197,42 @@ const isCollision = (tetrimino) => {
     return false; // 衝突なし
 };
 
-// / テトリミノを左に移動させる関数
-const shiftLeft = () => {
-    currentTetrimino.column--;// 左に移動
+// テトリミノを移動または回転させる関数
+const moveTetrimino = (newRow, newColumn, newMatrix = null) => {
+    const originalRow = currentTetrimino.row;
+    const originalColumn = currentTetrimino.column;
+    const originalMatrix = currentTetrimino.matrix;
+
+    currentTetrimino.row = newRow;
+    currentTetrimino.column = newColumn;
+    if (newMatrix) {
+        currentTetrimino.matrix = newMatrix;
+    }
+
     if (isCollision(currentTetrimino)) {
-        currentTetrimino.column++; // 衝突した場合は移動をキャンセル
+        // 衝突した場合は元の位置と形状に戻す
+        currentTetrimino.row = originalRow;
+        currentTetrimino.column = originalColumn;
+        currentTetrimino.matrix = originalMatrix;
+        return false; // 移動失敗
     } else {
         drawPlayScreen();
         drawTetrimino();
+        return true; // 移動成功
     }
+};
+
+
+// / テトリミノを左に移動させる関数
+const shiftLeft = () => {
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column - 1);
 };
 
 // テトリミノを右に移動させる関数
 const shiftRight = () => {
-    currentTetrimino.column++; // 右に移動
-    if (isCollision(currentTetrimino)) {
-        currentTetrimino.column--; // 衝突した場合は移動をキャンセル
-    } else {
-        drawPlayScreen();
-        drawTetrimino();
-    }
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column + 1);
 };
+
 
 // テトリミノの通常落下速度(millisec)
 const DROPSPEED = 1000;
@@ -227,15 +242,10 @@ let lastDropTime = 0;
 
 // テトリミノを1行落下させる関数
 const normalDrop = (currentTime) => {
-    // 現在時刻が最終ドロップ時刻よりもDROPSPEED経過していれば落下
     if (currentTime - lastDropTime > DROPSPEED) {
-        currentTetrimino.row++; //下に移動
-        if (isCollision(currentTetrimino)) {
-            currentTetrimino.row--; // 衝突した場合は移動をキャンセル
-
-             // テトリミノをフィールドに固定
-             lockTetrimino();
-
+        if (!moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
+            // 移動に失敗した場合（衝突した場合）
+            lockTetrimino();
             currentTetrimino = null; // 新しいテトリミノを生成するために現在のテトリミノをクリア
         }
         lastDropTime = currentTime;
@@ -264,28 +274,13 @@ function lockTetrimino() {
 
 function rotateTetrimino() {
     const iTetriminoSize = 4;
-    
-    // 現在のテトリミノの形状を取得
     let currentShape = currentTetrimino.matrix;
-    
-    // 現在の形状の大きさ（matrixSize x matrixSize）を取得
     let matrixSize = currentShape.length;
-    
-    // 新しい空の配列を作成（回転後の形状を格納するため）
     let rotatedShape = [];
-    
-    // 新しい形状の配列を0で初期化
-    for (let i = 0; i < matrixSize; i++) {
-        let newRow = [];
-        for (let j = 0; j < matrixSize; j++) {
-            newRow.push(0);
-        }
-        rotatedShape.push(newRow);
-    }
-    
-    // I型テトリミノの場合は特別な回転を行う
+
+    // 回転後の形状を計算
     if (currentTetrimino.name === 'I') {
-        // I型テトリミノが横長の場合
+        rotatedShape = new Array(iTetriminoSize).fill().map(() => new Array(iTetriminoSize).fill(0));
         if (currentShape[1][0] === 1) {
             // 縦長に変更
             for (let i = 0; i < iTetriminoSize; i++) {
@@ -298,27 +293,18 @@ function rotateTetrimino() {
             }
         }
     } else {
-        // I型以外のテトリミノの回転
+        rotatedShape = new Array(matrixSize).fill().map(() => new Array(matrixSize).fill(0));
         for (let i = 0; i < matrixSize; i++) {
             for (let j = 0; j < matrixSize; j++) {
-                // 90度回転の計算：新しい位置 = [j][matrixSize-1-i]
                 rotatedShape[j][matrixSize - 1 - i] = currentShape[i][j];
             }
         }
     }
 
-    // 回転後の形状を現在のテトリミノに設定
-    currentTetrimino.matrix = rotatedShape;
-
-    // 回転後に衝突が発生する場合は元に戻す
-    if (isCollision(currentTetrimino)) {
-        // 元の形状に戻す
-        currentTetrimino.matrix = currentShape;
-    } else {
-        drawPlayScreen();
-        drawTetrimino();
-    }
+    // 回転を試みる
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column, rotatedShape);
 }
+
 
 // キーボードイベントハンドラの追加
 const handleKeyDown = (e) => {
@@ -348,11 +334,10 @@ function gameLoop(currentTime) {
         lastDropTime = currentTime;
     } else {
         normalDrop(currentTime);
-        drawTetrimino();
+        drawTetrimino()
     }
 
     requestAnimationFrame(gameLoop);
-
 }
 
 // 初期化処理
