@@ -216,8 +216,6 @@ const moveTetrimino = (newRow, newColumn, newMatrix = null) => {
         currentTetrimino.matrix = originalMatrix;
         return false; // 移動失敗
     } else {
-        drawPlayScreen();
-        drawTetrimino();
         return true; // 移動成功
     }
 };
@@ -233,6 +231,10 @@ const shiftRight = () => {
     moveTetrimino(currentTetrimino.row, currentTetrimino.column + 1);
 };
 
+// テトリミノを下に移動させるソフトドロップ関数
+const shiftDown = () => {
+    moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column);
+};
 
 // テトリミノの通常落下速度(millisec)
 const DROPSPEED = 1000;
@@ -240,7 +242,7 @@ const DROPSPEED = 1000;
 // 最後のドロップ時間を記録する変数
 let lastDropTime = 0;
 
-// テトリミノを1行落下させる関数
+// テトリミノを時間経過とともに1行落下させる関数
 const normalDrop = (currentTime) => {
     if (currentTime - lastDropTime > DROPSPEED) {
         if (!moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
@@ -319,6 +321,9 @@ const handleKeyDown = (e) => {
             break;
         case "ArrowUp": // 追加: 上矢印キーで回転
             rotateTetrimino();
+            break;
+        case "ArrowDown":
+            shiftDown();
             break;
     }
 }
