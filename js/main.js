@@ -152,11 +152,7 @@ function addNewTetrimino() {
 
 // テトリミノを描画する関数
 function drawTetrimino() {
-    if (!currentTetrimino || !currentTetrimino.matrix) {
-        console.error('Current tetrimino is not properly initialized');
-        return;
-    }
-
+    if (currentTetrimino === null) return;
     CANVAS2D.fillStyle = currentTetrimino.color;
     for (let row = 0; row < currentTetrimino.matrix.length; row++) {
         for (let column = 0; column < currentTetrimino.matrix[row].length; column++) {
@@ -216,8 +212,6 @@ const moveTetrimino = (newRow, newColumn, newMatrix = null) => {
         currentTetrimino.matrix = originalMatrix;
         return false; // 移動失敗
     } else {
-        drawPlayScreen();
-        drawTetrimino();
         return true; // 移動成功
     }
 };
@@ -233,6 +227,10 @@ const shiftRight = () => {
     moveTetrimino(currentTetrimino.row, currentTetrimino.column + 1);
 };
 
+// テトリミノを下に移動させるソフトドロップ関数
+const shiftDown = () => {
+    moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column);
+};
 
 // テトリミノの通常落下速度(millisec)
 const DROPSPEED = 1000;
@@ -240,7 +238,7 @@ const DROPSPEED = 1000;
 // 最後のドロップ時間を記録する変数
 let lastDropTime = 0;
 
-// テトリミノを1行落下させる関数
+// テトリミノを時間経過とともに1行落下させる関数
 const normalDrop = (currentTime) => {
     if (currentTime - lastDropTime > DROPSPEED) {
         if (!moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
@@ -254,20 +252,20 @@ const normalDrop = (currentTime) => {
 
 // テトリミノの落下地点を返す関数
 function getTetriminoDropPosition() {
-    let ghostTetrimino = currentTetrimino;
-    while (true) {
-        ghostTetrimino.row++
-        if (isCollision(ghostTetrimino)) {
-            ghostTetrimino.row--;
-            break;
-        }
-    };
-    return ghostTetrimino;
+    let ghostRow = currentTetrimino.row;
+    while (!isCollision({...currentTetrimino, row: ghostRow + 1})) {
+        ghostRow++;
+    }
+    return ghostRow;
 }
 
 // ハードドロップを行う関数
 function hardDrop() {
-    currentTetrimino = getTetriminoDropPosition();
+    const dropRow = getTetriminoDropPosition();
+    if (moveTetrimino(dropRow, currentTetrimino.column)) {
+        lockTetrimino();
+        currentTetrimino = null; // 新しいテトリミノを生成するために現在のテトリミノをクリア
+    }
 }
 
 
@@ -282,8 +280,9 @@ function lockTetrimino() {
             if (cell) {
                 const x = column + c;
                 const y = row + r;
-                
-                field[y][x] = currentTetrimino.color;
+                if (y >= 0 && y < PLAYSCREENHEIGHT && x >= 0 && x < PLAYSCREENWIDTH) {
+                    field[y][x] = currentTetrimino.color;
+                }
             }
         });
     });
@@ -338,7 +337,10 @@ const handleKeyDown = (e) => {
         case "ArrowUp": // 追加: 上矢印キーで回転
             rotateTetrimino();
             break;
-        case "Space":
+        case "ArrowDown":
+            shiftDown();
+            break;
+        case " ":
             hardDrop();
             break;
     }
