@@ -273,15 +273,31 @@ function lockTetrimino() {
     });
 }
 
-function rotateTetrimino() {
+// テトリミノを時計回り
+function rotateTetriminoClockwise() {
     const iTetriminoSize = 4;
+    
+    // 現在のテトリミノの形状を取得
     let currentShape = currentTetrimino.matrix;
+    
+    // 現在の形状の大きさ（matrixSize x matrixSize）を取得
     let matrixSize = currentShape.length;
+    
+    // 新しい空の配列を作成（回転後の形状を格納するため）
     let rotatedShape = [];
-
-    // 回転後の形状を計算
+    
+    // 新しい形状の配列を0で初期化
+    for (let i = 0; i < matrixSize; i++) {
+        let newRow = [];
+        for (let j = 0; j < matrixSize; j++) {
+            newRow.push(0);
+        }
+        rotatedShape.push(newRow);
+    }
+    
+    // I型テトリミノの場合は特別な回転を行う
     if (currentTetrimino.name === 'I') {
-        rotatedShape = new Array(iTetriminoSize).fill().map(() => new Array(iTetriminoSize).fill(0));
+        // I型テトリミノが横長の場合
         if (currentShape[1][0] === 1) {
             // 縦長に変更
             for (let i = 0; i < iTetriminoSize; i++) {
@@ -294,18 +310,65 @@ function rotateTetrimino() {
             }
         }
     } else {
-        rotatedShape = new Array(matrixSize).fill().map(() => new Array(matrixSize).fill(0));
+        // I型以外のテトリミノの回転
         for (let i = 0; i < matrixSize; i++) {
             for (let j = 0; j < matrixSize; j++) {
                 rotatedShape[j][matrixSize - 1 - i] = currentShape[i][j];
             }
         }
     }
-
-    // 回転を試みる
+    // 回転後の形状でテトリミノの移動を試みる
+    // 衝突がない場合のみ回転を適用し、衝突する場合は元の形状を維持する
     moveTetrimino(currentTetrimino.row, currentTetrimino.column, rotatedShape);
 }
 
+// テトリミノを反時計回りに回転
+function rotateTetriminoCounterClockwise() {
+    const iTetriminoSize = 4;
+    
+    // 現在のテトリミノの形状を取得
+    let currentShape = currentTetrimino.matrix;
+    
+    // 現在の形状の大きさ（matrixSize x matrixSize）を取得
+    let matrixSize = currentShape.length;
+    
+    // 新しい空の配列を作成（回転後の形状を格納するため）
+    let rotatedShape = [];
+    
+    // 新しい形状の配列を0で初期化
+    for (let i = 0; i < matrixSize; i++) {
+        let newRow = [];
+        for (let j = 0; j < matrixSize; j++) {
+            newRow.push(0);
+        }
+        rotatedShape.push(newRow);
+    }
+    
+    // I型テトリミノの場合は特別な回転を行う
+    if (currentTetrimino.name === 'I') {
+        // I型テトリミノが縦長の場合
+        if (currentShape[0][1] === 1 || currentShape[0][2] === 1) {
+            // 横長に変更
+            for (let i = 0; i < iTetriminoSize; i++) {
+                rotatedShape[2][i] = 1;
+            }
+        } else {
+            // 縦長に変更
+            for (let i = 0; i < iTetriminoSize; i++) {
+                rotatedShape[i][1] = 1;
+            }
+        }
+    } else {
+        // I型以外のテトリミノの回転
+        for (let i = 0; i < matrixSize; i++) {
+            for (let j = 0; j < matrixSize; j++) {
+                rotatedShape[matrixSize - 1 - j][i] = currentShape[i][j];
+            }
+        }
+    }
+    // 回転後の形状でテトリミノの移動を試みる
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column, rotatedShape);
+}
 
 // キーボードイベントハンドラの追加
 const handleKeyDown = (e) => {
@@ -320,7 +383,12 @@ const handleKeyDown = (e) => {
             shiftRight();
             break;
         case "ArrowUp": // 追加: 上矢印キーで回転
-            rotateTetrimino();
+        case "x":
+            rotateTetriminoClockwise();
+            break;
+        case "Control":
+        case "z":
+            rotateTetriminoCounterClockwise()
             break;
         case "ArrowDown":
             shiftDown();
