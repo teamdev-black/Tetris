@@ -252,6 +252,24 @@ const normalDrop = (currentTime) => {
     }
 };
 
+// テトリミノの落下地点を返す関数
+function getTetriminoDropPosition() {
+    let ghostTetrimino = currentTetrimino;
+    while (true) {
+        ghostTetrimino.row++
+        if (isCollision(ghostTetrimino)) {
+            ghostTetrimino.row--;
+            break;
+        }
+    };
+    return ghostTetrimino;
+}
+
+// ハードドロップを行う関数
+function hardDrop() {
+    currentTetrimino = getTetriminoDropPosition();
+}
+
 
 // テトリミノをフィールドグリッドに固定する関数
 function lockTetrimino() {
@@ -319,6 +337,9 @@ const handleKeyDown = (e) => {
             break;
         case "ArrowUp": // 追加: 上矢印キーで回転
             rotateTetrimino();
+            break;
+        case "Space":
+            hardDrop();
             break;
     }
 }
