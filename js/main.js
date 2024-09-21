@@ -85,6 +85,18 @@ const drawPlayScreen = () => {
     // キャンバスを塗りつぶす
     CANVAS2D.fillRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
 
+    // 固定されたブロックを描画
+    for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
+        for (let col = 0; col < PLAYSCREENWIDTH; col++) {
+            if (field[row][col]) {
+                CANVAS2D.fillStyle = field[row][col];
+                CANVAS2D.fillRect(col * BLOCKSIZE, row * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+                CANVAS2D.strokeStyle = '#555';
+                CANVAS2D.strokeRect(col * BLOCKSIZE, row * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+            }
+        }
+    }
+
     // grid線を描画
     CANVAS2D.strokeStyle = '#555'; // grid-line color
     for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
@@ -93,6 +105,15 @@ const drawPlayScreen = () => {
         }
     }
 };
+
+// フィールドグリッドの初期化
+const field = [];
+for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
+    field[row] = [];
+    for (let col = 0; col < PLAYSCREENWIDTH; col++) {
+        field[row][col] = null; // 空のセルはnullとする
+    }
+}
 
 // テトリミノの生成順序
 let tetriminoSequence = [];
@@ -149,15 +170,69 @@ function drawTetrimino() {
     }
 }
 
+// 衝突判定を行うアロー関数
+const isCollision = (tetrimino) => {
+    const matrix = tetrimino.matrix;
+    const row = tetrimino.row;
+    const column = tetrimino.column;
+
+    for (let r = 0; r < matrix.length; r++) { // r = 行
+        for (let c = 0; c < matrix[r].length; c++) { // c = 列
+            if (matrix[r][c]) {
+                const x = column + c;
+                const y = row + r;
+
+                // テトリミノが左端または右端を超えていないか、下端を超えていないかをチェック
+                if (x < 0 || x >= PLAYSCREENWIDTH || y >= PLAYSCREENHEIGHT) {
+                    return true; // 衝突あり
+                }
+
+                // フィールドグリッドとの衝突をチェック
+                if (y >= 0 && field[y][x]) {
+                    return true; // 衝突あり
+                }
+            }
+        }
+    }
+    return false; // 衝突なし
+};
+
+// テトリミノを移動または回転させる関数
+const moveTetrimino = (newRow, newColumn, newMatrix = null) => {
+    const originalRow = currentTetrimino.row;
+    const originalColumn = currentTetrimino.column;
+    const originalMatrix = currentTetrimino.matrix;
+
+    currentTetrimino.row = newRow;
+    currentTetrimino.column = newColumn;
+    if (newMatrix) {
+        currentTetrimino.matrix = newMatrix;
+    }
+
+    if (isCollision(currentTetrimino)) {
+        // 衝突した場合は元の位置と形状に戻す
+        currentTetrimino.row = originalRow;
+        currentTetrimino.column = originalColumn;
+        currentTetrimino.matrix = originalMatrix;
+        return false; // 移動失敗
+    } else {
+        drawPlayScreen();
+        drawTetrimino();
+        return true; // 移動成功
+    }
+};
+
+
 // / テトリミノを左に移動させる関数
 const shiftLeft = () => {
-    currentTetrimino.column--;
-}
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column - 1);
+};
 
 // テトリミノを右に移動させる関数
 const shiftRight = () => {
-    currentTetrimino.column++;
-}
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column + 1);
+};
+
 
 // テトリミノの通常落下速度(millisec)
 const DROPSPEED = 1000;
@@ -167,36 +242,44 @@ let lastDropTime = 0;
 
 // テトリミノを1行落下させる関数
 const normalDrop = (currentTime) => {
-    // 現在時刻が最終ドロップ時刻よりもDROPSPEED経過していれば落下
     if (currentTime - lastDropTime > DROPSPEED) {
-        currentTetrimino.row++;
+        if (!moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
+            // 移動に失敗した場合（衝突した場合）
+            lockTetrimino();
+            currentTetrimino = null; // 新しいテトリミノを生成するために現在のテトリミノをクリア
+        }
         lastDropTime = currentTime;
     }
+};
+
+
+// テトリミノをフィールドグリッドに固定する関数
+function lockTetrimino() {
+    const matrix = currentTetrimino.matrix;
+    const row = currentTetrimino.row;
+    const column = currentTetrimino.column;
+
+    matrix.forEach((rowMatrix, r) => {
+        rowMatrix.forEach((cell, c) => {
+            if (cell) {
+                const x = column + c;
+                const y = row + r;
+                
+                field[y][x] = currentTetrimino.color;
+            }
+        });
+    });
 }
+
 function rotateTetrimino() {
     const iTetriminoSize = 4;
-    
-    // 現在のテトリミノの形状を取得
     let currentShape = currentTetrimino.matrix;
-    
-    // 現在の形状の大きさ（matrixSize x matrixSize）を取得
     let matrixSize = currentShape.length;
-    
-    // 新しい空の配列を作成（回転後の形状を格納するため）
     let rotatedShape = [];
-    
-    // 新しい形状の配列を0で初期化
-    for (let i = 0; i < matrixSize; i++) {
-        let newRow = [];
-        for (let j = 0; j < matrixSize; j++) {
-            newRow.push(0);
-        }
-        rotatedShape.push(newRow);
-    }
-    
-    // I型テトリミノの場合は特別な回転を行う
+
+    // 回転後の形状を計算
     if (currentTetrimino.name === 'I') {
-        // I型テトリミノが横長の場合
+        rotatedShape = new Array(iTetriminoSize).fill().map(() => new Array(iTetriminoSize).fill(0));
         if (currentShape[1][0] === 1) {
             // 縦長に変更
             for (let i = 0; i < iTetriminoSize; i++) {
@@ -209,18 +292,19 @@ function rotateTetrimino() {
             }
         }
     } else {
-        // I型以外のテトリミノの回転
+        rotatedShape = new Array(matrixSize).fill().map(() => new Array(matrixSize).fill(0));
         for (let i = 0; i < matrixSize; i++) {
             for (let j = 0; j < matrixSize; j++) {
-                // 90度回転の計算：新しい位置 = [j][matrixSize-1-i]
                 rotatedShape[j][matrixSize - 1 - i] = currentShape[i][j];
             }
         }
     }
 
-    // 回転後の形状を現在のテトリミノに設定
-    currentTetrimino.matrix = rotatedShape;
+    // 回転を試みる
+    moveTetrimino(currentTetrimino.row, currentTetrimino.column, rotatedShape);
 }
+
+
 // キーボードイベントハンドラの追加
 const handleKeyDown = (e) => {
     if (!currentTetrimino) return;
@@ -249,11 +333,10 @@ function gameLoop(currentTime) {
         lastDropTime = currentTime;
     } else {
         normalDrop(currentTime);
-        drawTetrimino();
+        drawTetrimino()
     }
 
     requestAnimationFrame(gameLoop);
-
 }
 
 // 初期化処理
