@@ -27,6 +27,8 @@ tetris/
 │       └── clear.wav
 ├── docs/
 │   ├── functional-requirements.md
+│   ├── development-workflow.md
+│   ├── meeting-notes.md
 │   └── directory-structure.md
 └── README.md
 ```
@@ -58,3 +60,5 @@ tetris/
 ### docs/
 - `functional-requirements.md`: プロジェクトの機能要件書を格納
 - `directory-structure.md`: このディレクトリ構造の説明を格納
+- `development-workflow.md`: プロジェクトの進め方を記載
+- `meeting-notes.md`: プロジェクトの議事録
