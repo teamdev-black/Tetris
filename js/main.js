@@ -152,11 +152,7 @@ function addNewTetrimino() {
 
 // テトリミノを描画する関数
 function drawTetrimino() {
-    if (!currentTetrimino || !currentTetrimino.matrix) {
-        console.error('Current tetrimino is not properly initialized');
-        return;
-    }
-
+    if (currentTetrimino === null) return;
     CANVAS2D.fillStyle = currentTetrimino.color;
     for (let row = 0; row < currentTetrimino.matrix.length; row++) {
         for (let column = 0; column < currentTetrimino.matrix[row].length; column++) {
@@ -254,6 +250,24 @@ const normalDrop = (currentTime) => {
     }
 };
 
+// テトリミノの落下地点を返す関数
+function getTetriminoDropPosition() {
+    let ghostRow = currentTetrimino.row;
+    while (!isCollision({...currentTetrimino, row: ghostRow + 1})) {
+        ghostRow++;
+    }
+    return ghostRow;
+}
+
+// ハードドロップを行う関数
+function hardDrop() {
+    const dropRow = getTetriminoDropPosition();
+    if (moveTetrimino(dropRow, currentTetrimino.column)) {
+        lockTetrimino();
+        currentTetrimino = null; // 新しいテトリミノを生成するために現在のテトリミノをクリア
+    }
+}
+
 
 // テトリミノをフィールドグリッドに固定する関数
 function lockTetrimino() {
@@ -266,8 +280,9 @@ function lockTetrimino() {
             if (cell) {
                 const x = column + c;
                 const y = row + r;
-                
-                field[y][x] = currentTetrimino.color;
+                if (y >= 0 && y < PLAYSCREENHEIGHT && x >= 0 && x < PLAYSCREENWIDTH) {
+                    field[y][x] = currentTetrimino.color;
+                }
             }
         });
     });
@@ -392,6 +407,9 @@ const handleKeyDown = (e) => {
             break;
         case "ArrowDown":
             shiftDown();
+            break;
+        case " ":
+            hardDrop();
             break;
     }
 }
