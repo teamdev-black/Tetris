@@ -264,9 +264,8 @@ function lockTetrimino() {
             if (cell) {
                 const x = column + c;
                 const y = row + r;
-                if (y >= 0 && x >= 0 && x < PLAYSCREENWIDTH && y < PLAYSCREENHEIGHT) {
-                    field[y][x] = currentTetrimino.color; // 色でブロックを表現
-                }
+                
+                field[y][x] = currentTetrimino.color;
             }
         });
     });
