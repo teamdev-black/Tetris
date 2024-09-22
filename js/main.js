@@ -144,12 +144,16 @@ function getNextTetrimino() {
 // 現在のテトリミノを保持する変数
 let currentTetrimino = null;
 
+
 // 新しいテトリミノをゲームに追加する関数
 function addNewTetrimino() {
     currentTetrimino = getNextTetrimino();
-    drawTetrimino();
+    if (checkGameOver()) {
+        handleGameOver();
+    } else {
+        drawTetrimino();
+    }
 }
-
 // テトリミノを描画する関数
 function drawTetrimino() {
     if (currentTetrimino === null) return;
@@ -410,26 +414,57 @@ function rotateTetriminoCounterClockwise() {
     // 回転後の形状でテトリミノの移動を試みる
     moveTetrimino(currentTetrimino.row, currentTetrimino.column, rotatedShape);
 }
+let isGameOver = false;
+// 新しいテトリミノの出現時にゲームオーバーをチェックする関数
+function checkGameOver() {
+    if (currentTetrimino === null) return false;
+    
+    // 新しいテトリミノが既存のブロックと重なるかチェック
+    for (let row = 0; row < currentTetrimino.matrix.length; row++) {
+        for (let col = 0; col < currentTetrimino.matrix[row].length; col++) {
+            if (currentTetrimino.matrix[row][col]) {
+                const x = currentTetrimino.column + col;
+                const y = currentTetrimino.row + row;
+                if (y >= 0 && field[y][x]) {
+                    return true; // ゲームオーバー
+                }
+            }
+        }
+    }
+    
+    // ブロックが完全に21段目以上に積み上がったかチェック
+    for (let col = 0; col < PLAYSCREENWIDTH; col++) {
+        if (field[0][col] || field[1][col]) {
+            return true; // ゲームオーバー
+        }
+    }
+    
+    return false;
+}
+// ゲームオーバー時の処理
+function handleGameOver() {
+    isGameOver = true;
+}
 
-// キーボードイベントハンドラの追加
+
+// キーボードイベントハンドラ
 const handleKeyDown = (e) => {
     if (!currentTetrimino) return;
 
     switch(e.key) {
-
-        case "ArrowLeft": //"ArrowLeft"は左矢印キーの識別子になります。
+        case "ArrowLeft":
             shiftLeft();
             break;
-        case "ArrowRight": //"ArrowRight"は左矢印キーの識別子になります。
+        case "ArrowRight":
             shiftRight();
             break;
-        case "ArrowUp": // 追加: 上矢印キーで回転
+        case "ArrowUp":
         case "x":
             rotateTetriminoClockwise();
             break;
         case "Control":
         case "z":
-            rotateTetriminoCounterClockwise()
+            rotateTetriminoCounterClockwise();
             break;
         case "ArrowDown":
             shiftDown();
@@ -439,22 +474,29 @@ const handleKeyDown = (e) => {
             break;
     }
 }
-
 // ゲームループ関数
 // requestAnimationFlameの呼び出しにより現在の時刻:DOMHighResTimeStampがgameLoopに渡される
 // それをcurrentTimeとして受け取っている
-function gameLoop(currentTime) {  
-    drawPlayScreen();
-    if (currentTetrimino === null) {
-        addNewTetrimino();
-        lastDropTime = currentTime;
-    } else {
-        normalDrop(currentTime);
-        drawTetrimino()
+function gameLoop(currentTime) {
+    if (!isGameOver) {
+        drawPlayScreen();
+        if (currentTetrimino === null) {
+            addNewTetrimino();
+            if (checkGameOver()) {
+                handleGameOver();
+                return; // ゲームオーバー時にループを終了
+            } else {
+                lastDropTime = currentTime;
+            }
+        } else {
+            normalDrop(currentTime);
+            drawTetrimino();
+        }
+        requestAnimationFrame(gameLoop);
     }
-
-    requestAnimationFrame(gameLoop);
+    // isGameOver が true の場合、requestAnimationFrame は呼ばれないのでゲームループが停止する
 }
+
 
 // 初期化処理
 const init = () => {
