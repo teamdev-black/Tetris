@@ -268,39 +268,30 @@ function hardDrop() {
     }
 }
 
-// テトリミノが揃ったら、その行のミノを消去する機能を実装
+/// フィールド内の完全に埋まった行を検出し，消去し，上の行を下に移動させる関数
 const checkAndClearFullLines = () => {
     let linesCleared = 0;
-    for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
-        // 行がすべて埋まっているかチェック
+
+    // 1. 完全に埋まった行を検出し，消去するロジック
+    for (let row = PLAYSCREENHEIGHT - 1; row >= 0; row--) {
         if (field[row].every(cell => cell !== null)) {
-            // 行をクリア
+            // 埋まった行を削除
             field.splice(row, 1);
-            // 新しい空の行を追加
-            field.unshift(new Array(PLAYSCREENWIDTH).fill(null));
             linesCleared++;
-            row--; // 削除した行の分、行を一つ上に戻す
         }
     }
+
+    // 2. 上の行を下に移動させるロジック
+    if (linesCleared > 0) {
+        // 消去した行数分の新しい空の行を追加
+        for (let i = 0; i < linesCleared; i++) {
+            field.unshift(new Array(PLAYSCREENWIDTH).fill(null));
+        }
+    }
+
     return linesCleared;
 };
 
-// 消去されたテトリミノ分、上に積まれていたテトリミノを下に落とす機能を実装
-const dropBlocksAbove = () => {
-    for (let row = PLAYSCREENHEIGHT - 1; row >= 0; row--) {
-        for (let col = 0; col < PLAYSCREENWIDTH; col++) {
-            if (field[row][col] === null) {
-                for (let aboveRow = row - 1; aboveRow >= 0; aboveRow--) {
-                    if (field[aboveRow][col] !== null) {
-                        field[row][col] = field[aboveRow][col];
-                        field[aboveRow][col] = null;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-};
 
 // テトリミノをフィールドグリッドに固定する関数
 function lockTetrimino() {
@@ -320,13 +311,10 @@ function lockTetrimino() {
         });
     });
 
-    // 行をチェックして消去
-    const clearedLines = checkAndClearFullLines();
+   // 行をチェックして消去し、上の行を下に移動させる
+   const clearedLines = checkAndClearFullLines();
     
-    // 消去された行分だけブロックを下に落とす
-    if (clearedLines > 0) {
-        dropBlocksAbove();
-    }
+
 }
 
 // テトリミノを時計回り
