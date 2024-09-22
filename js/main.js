@@ -281,12 +281,9 @@ const checkAndClearFullLines = () => {
         }
     }
 
-    // 2. 上の行を下に移動させるロジック
-    if (linesCleared > 0) {
-        // 消去した行数分の新しい空の行を追加
-        for (let i = 0; i < linesCleared; i++) {
-            field.unshift(new Array(PLAYSCREENWIDTH).fill(null));
-        }
+    // 消去した行数分の新しい空の行を追加
+    for (let i = 0; i < linesCleared; i++) {
+        field.unshift(new Array(PLAYSCREENWIDTH).fill(null));
     }
 
     return linesCleared;
