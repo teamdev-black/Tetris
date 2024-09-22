@@ -258,26 +258,35 @@ function rotateTetrimino(clockwise = true) {
 
     if (name === 'O') return; // O型は回転しない
 
+    const iTetriminoSize = 4;
+
     if (name === 'I') {
-        // I型テトリミノの特別な回転処理
-        newShape = Array(4).fill().map(() => Array(4).fill(0));
-        if (shape[1][0] === 1) {
-            // 縦長から横長に
-            newShape[2] = [1, 1, 1, 1];
-        } else if (shape[2][1] === 1) {
-            // 横長から縦長に（時計回り）
-            for (let i = 0; i < 4; i++) {
-                newShape[i][2] = 1;
+        newShape = Array(iTetriminoSize).fill().map(() => Array(iTetriminoSize).fill(0));
+        if (clockwise) {
+            if (shape[1][0] === 1) { // 横長の場合
+                // 縦長に変更
+                for (let i = 0; i < iTetriminoSize; i++) {
+                    newShape[i][2] = 1;
+                }
+            } else { // 縦長の場合
+                // 横長に変更
+                for (let i = 0; i < iTetriminoSize; i++) {
+                    newShape[1][i] = 1;
+                }
             }
-        } else if (shape[1][2] === 1) {
-            // 縦長から横長に（反時計回り）
-            newShape[1] = [1, 1, 1, 1];
-        } else {
-            // 横長から縦長に
-            for (let i = 0; i < 4; i++) {
-                newShape[i][1] = 1;
+        } else { // 反時計回り
+            if (shape[0][1] === 1 || shape[0][2] === 1) { // 縦長の場合
+                // 横長に変更
+                for (let i = 0; i < iTetriminoSize; i++) {
+                    newShape[2][i] = 1;
+                }
+            } else { // 横長の場合
+                // 縦長に変更
+                for (let i = 0; i < iTetriminoSize; i++) {
+                    newShape[i][1] = 1;
+                }
             }
-        }
+        } 
     } else {
         newShape = shape.map((row, i) => 
             row.map((_, j) => clockwise ? shape[shape.length - 1 - j][i] : shape[j][shape.length - 1 - i])
