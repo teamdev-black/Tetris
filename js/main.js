@@ -279,6 +279,7 @@ const checkAndClearFullLines = () => {
             // 新しい空の行を追加
             field.unshift(new Array(PLAYSCREENWIDTH).fill(null));
             linesCleared++;
+            row--; // 削除した行の分、行を一つ上に戻す
         }
     }
     return linesCleared;
