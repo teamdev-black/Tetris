@@ -268,6 +268,27 @@ function hardDrop() {
     }
 }
 
+/// フィールド内の完全に埋まった行を検出し，消去し，上の行を下に移動させる関数
+const checkAndClearFullLines = () => {
+    let linesCleared = 0;
+
+    // 1. 完全に埋まった行を検出し，消去するロジック
+    for (let row = PLAYSCREENHEIGHT - 1; row >= 0; row--) {
+        if (field[row].every(cell => cell !== null)) {
+            // 埋まった行を削除
+            field.splice(row, 1);
+            linesCleared++;
+        }
+    }
+
+    // 消去した行数分の新しい空の行を追加
+    for (let i = 0; i < linesCleared; i++) {
+        field.unshift(new Array(PLAYSCREENWIDTH).fill(null));
+    }
+
+    return linesCleared;
+};
+
 
 // テトリミノをフィールドグリッドに固定する関数
 function lockTetrimino() {
@@ -286,6 +307,11 @@ function lockTetrimino() {
             }
         });
     });
+
+   // 行をチェックして消去し、上の行を下に移動させる
+   const clearedLines = checkAndClearFullLines();
+    
+
 }
 
 // テトリミノを時計回り
@@ -441,3 +467,4 @@ const init = () => {
 
 // 初期化関数の呼び出し
 init();
+
