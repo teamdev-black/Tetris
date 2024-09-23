@@ -12,11 +12,6 @@ export function setCurrentTetrimino(tetrimino) {
     currentTetrimino = tetrimino;
 }
 
-export function setInitialHoldTetrimino() {
-    if (holdTetrimino === null) {
-        holdTetrimino = getNextTetrimino();
-    }
-}
 
 export function getCurrentTetrimino() {
     return currentTetrimino;
