@@ -1,11 +1,22 @@
 import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
 
-export let currentTetrimino = null;
+let currentTetrimino = null;
 export let ghostTetriminoRow = null;
 export let holdTetrimino = null;
 export let holdCount = 0;
 let tetriminoSequence = [];
+
+
+export function setCurrentTetrimino(tetrimino) {
+    currentTetrimino = tetrimino;
+}
+
+
+export function getCurrentTetrimino() {
+    return currentTetrimino;
+}
+
 
 export function getNextTetrimino() {
     if (tetriminoSequence.length === 0) {
@@ -45,6 +56,7 @@ export function moveTetrimino(newRow, newColumn, newShape = null) {
     return true;
 }
 
+
 // テトリミノの移動操作
 export const moveLeft = () => moveTetrimino(currentTetrimino.row, currentTetrimino.column - 1);
 export const moveRight = () => moveTetrimino(currentTetrimino.row, currentTetrimino.column + 1);
@@ -70,24 +82,23 @@ export function hold() {
     if (holdTetrimino === null) {
         holdTetrimino = { ...currentTetrimino };
         currentTetrimino = null;
-        holdCount++
+        holdCount++;
     } else if (holdCount === 0) {
         let tempTetrimino = { ...holdTetrimino };
         holdTetrimino = { ...currentTetrimino };
+        // 初期ホールドのみ機能しない
+        holdTetrimino.shape =  TETRIMINOS[holdTetrimino.name].shape;    
 
-        // ホールド入れ替え後は初期位置、初期向きから生成
-        const {column, row} = getInitialTetriminoPosition(currentTetrimino.shape);
-        Object.assign(currentTetrimino, {
-            shape: tempTetrimino.shape,
-            name: tempTetrimino.name,
-            color: tempTetrimino.color,
+        const {column, row} = getInitialTetriminoPosition(tempTetrimino.shape);
+        currentTetrimino = {
+            ...tempTetrimino,
             column: column,
             row: row,
-        });
-        // holdCountを+する
+        };
         holdCount++;
     }
 }
+
 
 function resetHoldCount() {
     holdCount = 0;

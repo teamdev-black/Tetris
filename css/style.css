@@ -5,9 +5,65 @@ body {
   height: 100vh;
   background-color: #f0f0f0;
   margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-canvas {
+#game-container {
+  display: flex;
+  gap: 20px;
+}
+
+#left-container,
+#right-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+#hold-container,
+#next-container,
+#score-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#hold-canvas {
   background-color: #333;
   border: 2px solid #000;
+  width: 120px;
+  height: 120px;
+}
+
+.next-canvas {
+  background-color: #333;
+  border: 2px solid #000;
+  margin-bottom: 10px;
+}
+
+.next-canvas.large {
+  width: 120px;
+  height: 120px;
+}
+
+.next-canvas.small {
+  width: 80px;
+  height: 80px;
+}
+
+h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#score-container {
+  text-align: center;
+}
+
+#score {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
 }

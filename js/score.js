@@ -1,4 +1,4 @@
-import { currentTetrimino } from './tetrimino.js';
+import { getCurrentTetrimino } from './tetrimino.js';
 import { field } from './board.js';
 import { animationId } from './game.js';
 import { PLAY_SCREEN_WIDTH } from './utils.js';
@@ -6,6 +6,7 @@ import { PLAY_SCREEN_WIDTH } from './utils.js';
 export let isGameOver = false;
 
 export function checkGameOver() {
+    const currentTetrimino = getCurrentTetrimino();
     if (!currentTetrimino) {
         console.log("Not Null");
         return false;
