@@ -86,6 +86,8 @@ export function hold() {
     } else if (holdCount === 0) {
         let tempTetrimino = { ...holdTetrimino };
         holdTetrimino = { ...currentTetrimino };
+        // 初期ホールドのみ機能しない
+        holdTetrimino.shape =  TETRIMINOS[holdTetrimino.name].shape;    
 
         const {column, row} = getInitialTetriminoPosition(tempTetrimino.shape);
         currentTetrimino = {
