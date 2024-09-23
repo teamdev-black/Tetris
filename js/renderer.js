@@ -21,7 +21,7 @@ export function drawPlayScreen() {
 
     drawGrid();
     if (currentTetrimino) {
-        drawTetrimino();
+        drawTetrimino(currentTetrimino);
     }
 }
 
@@ -41,8 +41,8 @@ function drawGrid() {
     }
 }
 
-function drawTetrimino() {
-    const { shape, color, row, column } = currentTetrimino;
+function drawTetrimino(tetrimino) {
+    const { shape, color, row, column } = tetrimino;
     shape.forEach((rowShape, r) => {
         rowShape.forEach((cell, c) => {
             if (cell) {
