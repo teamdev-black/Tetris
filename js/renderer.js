@@ -1,43 +1,53 @@
-import { BLOCKSIZE, CANVASWIDTH, CANVASHEIGHT, PLAYSCREENWIDTH, PLAYSCREENHEIGHT } from './utils.js';
+import { BLOCK_SIZE, CANVAS_WIDTH, CANVAS_HEIGHT, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
+import { field } from './board.js';
 import { currentTetrimino } from './tetrimino.js';
 
-const CANVAS = document.getElementById('canvas');
-const CANVAS2D = CANVAS.getContext('2d');
-
-CANVAS.width = CANVASWIDTH;
-CANVAS.height = CANVASHEIGHT;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
 
 export function drawPlayScreen() {
-    // ... (プレイ画面描画処理)
-    // 背景色を黒に設定
-    CANVAS2D.fillStyle = '#000';
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // キャンバスを塗りつぶす
-    CANVAS2D.fillRect(0, 0, CANVASWIDTH, CANVASHEIGHT);
-
-    // grid線を描画
-    CANVAS2D.strokeStyle = '#555'; // grid-line color
-    for (let row = 0; row < PLAYSCREENHEIGHT; row++) {
-        for (let col = 0; col < PLAYSCREENWIDTH; col++) {
-            CANVAS2D.strokeRect(col * BLOCKSIZE, row * BLOCKSIZE, BLOCKSIZE, BLOCKSIZE);
+    for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {
+        for (let col = 0; col < PLAY_SCREEN_WIDTH; col++) {
+            if (field[row][col]) {
+                drawBlock(col, row, field[row][col]);
+            }
         }
     }
-};
 
+    drawGrid();
+    if (currentTetrimino) {
+        drawTetrimino();
+    }
+}
 
+function drawBlock(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+    ctx.strokeStyle = '#555';
+    ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+}
 
-export function drawTetrimino() {
-    // ...(現在のテトリミノ描画処理)
-    CANVAS2D.fillStyle = currentTetrimino.color;
-    for (let row = 0; row < currentTetrimino.matrix.length; row++) {
-        for (let column = 0; column < currentTetrimino.matrix[row].length; column++) {
-            if (currentTetrimino.matrix[row][column]) {
-                const x = (currentTetrimino.column + column) * BLOCKSIZE;
-                const y = (currentTetrimino.row + row) * BLOCKSIZE;
-                CANVAS2D.fillRect(x, y, BLOCKSIZE, BLOCKSIZE);
-                CANVAS2D.strokeRect(x, y, BLOCKSIZE, BLOCKSIZE);
-            }
+function drawGrid() {
+    ctx.strokeStyle = '#555';
+    for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {
+        for (let col = 0; col < PLAY_SCREEN_WIDTH; col++) {
+            ctx.strokeRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
     }
 }
 
+function drawTetrimino() {
+    const { shape, color, row, column } = currentTetrimino;
+    shape.forEach((rowShape, r) => {
+        rowShape.forEach((cell, c) => {
+            if (cell) {
+                drawBlock(column + c, row + r, color);
+            }
+        });
+    });
+}
