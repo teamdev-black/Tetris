@@ -2,6 +2,7 @@ import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
 
 export let currentTetrimino = null;
+export let ghostTetriminoRow = null;
 let tetriminoSequence = [];
 
 export function getNextTetrimino() {
@@ -42,17 +43,15 @@ export const moveDown = () => moveTetrimino(currentTetrimino.row + 1, currentTet
 
 // テトリミノの落下地点を取得
 export function getTetriminoDropPosition() {
-    let ghostRow = currentTetrimino.row;
-    while (!checkCollision({ ...currentTetrimino, row: ghostRow + 1 })) {
-        ghostRow++;
+    ghostTetriminoRow = currentTetrimino.row;
+    while (!checkCollision({ ...currentTetrimino, row: ghostTetriminoRow + 1 })) {
+        ghostTetriminoRow++;
     }
-    return ghostRow;
 }
 
 // ハードドロップ
 export function hardDrop() {
-    const dropRow = getTetriminoDropPosition();
-    if (moveTetrimino(dropRow, currentTetrimino.column)) {
+    if (moveTetrimino(ghostTetriminoRow, currentTetrimino.column)) {
         lockTetrimino();
         currentTetrimino = null;
     }
