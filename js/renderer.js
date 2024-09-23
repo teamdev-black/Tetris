@@ -1,11 +1,30 @@
 import { BLOCK_SIZE, CANVAS_WIDTH, CANVAS_HEIGHT, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field } from './board.js';
-import { currentTetrimino, getTetriminoDropPosition, ghostTetriminoRow } from './tetrimino.js';
+import { getCurrentTetrimino, getTetriminoDropPosition, ghostTetriminoRow } from './tetrimino.js';
 
 const canvas = document.getElementById('canvas');
+const holdCanvas = document.querySelector('#hold-canvas');
+const nextCanvases = [
+    document.querySelector('#next-canvas-1'),
+    document.querySelector('#next-canvas-2'),
+    document.querySelector('#next-canvas-3'),
+    document.querySelector('#next-canvas-4'),
+    document.querySelector('#next-canvas-5')
+];
+
 const ctx = canvas.getContext('2d');
+const holdCtx = holdCanvas.getContext('2d');
+const nextCtxs = nextCanvases.map(canvas => canvas.getContext('2d'));
+
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
+
+// Hold と Next キャンバスのサイズを設定（例として4x4のグリッドとします）
+const SIDE_CANVAS_SIZE = BLOCK_SIZE * 4;
+holdCanvas.width = holdCanvas.height = SIDE_CANVAS_SIZE;
+nextCanvases.forEach(canvas => {
+    canvas.width = canvas.height = SIDE_CANVAS_SIZE;
+});
 
 export function drawPlayScreen() {
     ctx.fillStyle = '#000';
@@ -20,6 +39,7 @@ export function drawPlayScreen() {
     }
 
     drawGrid();
+    const currentTetrimino = getCurrentTetrimino();
     if (currentTetrimino) {
         drawTetrimino(currentTetrimino);
         getTetriminoDropPosition();
@@ -49,6 +69,44 @@ function drawTetrimino(tetrimino) {
         rowShape.forEach((cell, c) => {
             if (cell) {
                 drawBlock(column + c, row + r, color);
+            }
+        });
+    });
+}
+
+export function drawHoldTetrimino(holdTetrimino) {
+    clearCanvas(holdCtx, SIDE_CANVAS_SIZE);
+    if (holdTetrimino) {
+        drawTetriminoOnCanvas(holdCtx, holdTetrimino, SIDE_CANVAS_SIZE / 2, SIDE_CANVAS_SIZE / 2);
+    }
+}
+
+export function drawNextTetriminos(nextTetriminos) {
+    nextCtxs.forEach((ctx, index) => {
+        clearCanvas(ctx, SIDE_CANVAS_SIZE);
+        if (nextTetriminos[index]) {
+            drawTetriminoOnCanvas(ctx, nextTetriminos[index], SIDE_CANVAS_SIZE / 2, SIDE_CANVAS_SIZE / 2);
+        }
+    });
+}
+
+function clearCanvas(ctx, size) {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, size, size);
+}
+
+function drawTetriminoOnCanvas(ctx, tetrimino, centerX, centerY) {
+    const { shape, color } = tetrimino;
+    const blockSize = Math.min(centerX, centerY) / 3; // テトリミノのサイズを調整
+    const offsetX = centerX - (shape[0].length * blockSize) / 2;
+    const offsetY = centerY - (shape.length * blockSize) / 2;
+
+    ctx.fillStyle = color;
+    shape.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value) {
+                ctx.fillRect(offsetX + x * blockSize, offsetY + y * blockSize, blockSize, blockSize);
+                ctx.strokeRect(offsetX + x * blockSize, offsetY + y * blockSize, blockSize, blockSize);
             }
         });
     });
