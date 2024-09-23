@@ -3,6 +3,8 @@ import { field, checkCollision, clearFullLines } from './board.js';
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
+export let holdTetrimino = null;
+export let holdCount = 0;
 let tetriminoSequence = [];
 
 export function getNextTetrimino() {
@@ -11,10 +13,17 @@ export function getNextTetrimino() {
     }
     const name = tetriminoSequence.pop();
     const { shape, color } = TETRIMINOS[name];
-    const column = Math.floor(PLAY_SCREEN_WIDTH / 2) - Math.ceil(shape[0].length / 2);
-    const row = 0;
+    const { column, row } = getInitialTetriminoPosition(shape);
+    // const column = Math.floor(PLAY_SCREEN_WIDTH / 2) - Math.ceil(shape[0].length / 2);
+    // const row = 0;
 
     return { name, shape, color, row, column };
+}
+
+export function getInitialTetriminoPosition(shape) {
+    const column = Math.floor(PLAY_SCREEN_WIDTH / 2) - Math.ceil(shape[0].length / 2);
+    const row = 0;
+    return { column, row };
 }
 
 export function addNewTetrimino() {
@@ -57,6 +66,33 @@ export function hardDrop() {
     }
 }
 
+export function hold() {
+    if (holdTetrimino === null) {
+        holdTetrimino = { ...currentTetrimino };
+        currentTetrimino = null;
+        holdCount++
+    } else if (holdCount === 0) {
+        let tempTetrimino = { ...holdTetrimino };
+        holdTetrimino = { ...currentTetrimino };
+
+        // ホールド入れ替え後は初期位置、初期向きから生成
+        const {column, row} = getInitialTetriminoPosition(currentTetrimino.shape);
+        Object.assign(currentTetrimino, {
+            shape: tempTetrimino.shape,
+            name: tempTetrimino.name,
+            color: tempTetrimino.color,
+            column: column,
+            row: row,
+        });
+        // holdCountを+する
+        holdCount++;
+    }
+}
+
+function resetHoldCount() {
+    holdCount = 0;
+}
+
 export function lockTetrimino() {
     const { shape, row, column, color } = currentTetrimino;
     shape.forEach((rowShape, r) => {
@@ -72,6 +108,7 @@ export function lockTetrimino() {
     });
     clearFullLines();
     currentTetrimino = null;
+    resetHoldCount(); // hold回数をリセット
 }
 
 export function rotateTetrimino(clockwise = true) {
