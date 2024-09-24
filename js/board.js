@@ -2,7 +2,7 @@ import { PLAY_SCREEN_WIDTH, PLAY_SCREEN_HEIGHT } from './utils.js';
 import { drawBlock } from './renderer.js';
 
 export let field = [];
-let FLASH_RATE = 100;
+let FLASH_RATE = 150;
 
 export function initField() {
     field = Array(PLAY_SCREEN_HEIGHT).fill().map(() => Array(PLAY_SCREEN_WIDTH).fill(null));

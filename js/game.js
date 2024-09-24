@@ -34,9 +34,9 @@ export async function gameLoop(currentTime) {
         lastDropTime = currentTime;
     } else if (currentTetrimino !== null ) {
         if (canMoveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
-            normalDrop(currentTime);
+            await normalDrop(currentTime);
         } else {
-            lockTetrimino();
+            await lockTetrimino();
         }
     
     }
