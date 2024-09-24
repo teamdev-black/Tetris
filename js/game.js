@@ -1,6 +1,6 @@
-import { PLAY_SCREEN_WIDTH, PLAY_SCREEN_HEIGHT, DROP_SPEED } from './utils.js';
-import { initField, field, clearFullLines } from './board.js';
-import { addNewTetrimino, moveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, getCurrentTetrimino, hold, } from './tetrimino.js';
+import { DROP_SPEED } from './utils.js';
+import { initField,} from './board.js';
+import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino,} from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
 import { checkGameOver, handleGameOver } from './score.js';
 
@@ -18,32 +18,42 @@ export function initGame() {
     nextTetriminos.push(getNextTetrimino());
 }
 
-export function gameLoop(currentTime) {
+export async function gameLoop(currentTime) {
+    
     drawPlayScreen();
     drawHoldTetrimino(holdTetrimino);
     drawNextTetriminos(nextTetriminos);
     
-    if (getCurrentTetrimino() === null) {
-        setCurrentTetrimino(nextTetriminos.shift());
-        nextTetriminos.push(getNextTetrimino());
+    if (!isLocking && currentTetrimino === null) {
+        console.log('Adding next tetrimino');
+        addNextTetrimino();
         if (checkGameOver()) {
             handleGameOver();
             return;
         }
         lastDropTime = currentTime;
-    } else {
-        normalDrop(currentTime);
+    } else if (currentTetrimino !== null ) {
+        if (canMoveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
+            normalDrop(currentTime);
+        } else {
+            lockTetrimino();
+        }
+    
     }
+    
     animationId = requestAnimationFrame(gameLoop);
 }
-function normalDrop(currentTime) {
+
+async function normalDrop(currentTime) {
     if (currentTime - lastDropTime > DROP_SPEED) {
-        const currentTetrimino = getCurrentTetrimino();
-        if (!moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
-            lockTetrimino();
-            setCurrentTetrimino(null);
-        }
+        moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column);
+        console.log('Normal drop', { currentTetrimino });
         lastDropTime = currentTime;
     }
 }
 
+function addNextTetrimino() {
+    setCurrentTetrimino(nextTetriminos.shift());
+    nextTetriminos.push(getNextTetrimino());
+    console.log('Next tetrimino added', {currentTetrimino});
+}

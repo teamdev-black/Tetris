@@ -26,6 +26,11 @@ nextCanvases.forEach(canvas => {
     canvas.width = canvas.height = SIDE_CANVAS_SIZE;
 });
 
+const flashColors = {
+    "flash": "#d9e4f1", // パステルブルー
+    "flash-interval": "#f2f2f2", // ライトグレー
+};
+
 export function drawPlayScreen() {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -47,11 +52,15 @@ export function drawPlayScreen() {
     }
 }
 
-function drawBlock(x, y, color) {
-    ctx.fillStyle = color;
+export function drawBlock(x, y, color) {
+    if (color === "flash" || color === "flash-interval") {
+        ctx.fillStyle = flashColors[color]; // flash用の色
+    } else {
+        ctx.fillStyle = color;
+        ctx.strokeStyle = '#555';
+        ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+    }
     ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-    ctx.strokeStyle = '#555';
-    ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
 }
 
 function drawGrid(strokeStyle='#555') {

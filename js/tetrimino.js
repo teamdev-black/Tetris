@@ -1,10 +1,11 @@
 import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
 
-let currentTetrimino = null;
+export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
 export let holdTetrimino = null;
 export let holdCount = 0;
+export let isLocking = false;
 let tetriminoSequence = [];
 
 
@@ -51,6 +52,16 @@ export function moveTetrimino(newRow, newColumn, newShape = null) {
 
     if (checkCollision(currentTetrimino)) {
         Object.assign(currentTetrimino, originalTetrimino);
+        return false;
+    }
+    return true;
+}
+
+export function canMoveTetrimino(newRow, newColumn) {
+    const movedTetrimino = { ...currentTetrimino };
+    movedTetrimino.row = newRow;
+    movedTetrimino.column = newColumn;
+    if (checkCollision(movedTetrimino)) {
         return false;
     }
     return true;
@@ -104,13 +115,13 @@ function resetTetriminoPosition(tetrimino) {
     };
 }
 
-
-
 function resetHoldCount() {
     holdCount = 0;
 }
 
-export function lockTetrimino() {
+export async function lockTetrimino() {
+    console.log('Lock tetrimino start');
+    isLocking = true;
     const { shape, row, column, color } = currentTetrimino;
     shape.forEach((rowShape, r) => {
         rowShape.forEach((cell, c) => {
@@ -123,10 +134,14 @@ export function lockTetrimino() {
             }
         });
     });
-    clearFullLines();
+    console.log('Tetrimino placed on field');
+    console.log('Clearing full lines');
+    await clearFullLines();
+    console.log('Full lines cleared');
     currentTetrimino = null;
-    console.log(holdCount);
-    resetHoldCount(); // hold回数をリセット
+    resetHoldCount();
+    console.log('Lock tetrimino end');
+    isLocking = false;
 }
 
 export function rotateTetrimino(clockwise = true) {
