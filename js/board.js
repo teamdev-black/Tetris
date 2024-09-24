@@ -21,21 +21,29 @@ export function checkCollision(tetrimino) {
 }
 
 export const clearFullLines = () => {
-    let linesCleared = 0;
-
-    // 1. 完全に埋まった行を検出し，消去するロジック
-    for (let row = PLAY_SCREEN_HEIGHT - 1; row >= 0; row--) {
+    let fullRows = []
+    // 埋まっている行を特定
+    for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {
         if (field[row].every(cell => cell !== null)) {
-            // 埋まった行を削除
-            field.splice(row, 1);
-            linesCleared++;
+            fullRows.push(row);
         }
     }
 
+    if (fullRows.length === 0) return; // 埋まっている行がない場合は処理しない
+
+    
+    // Line消去アニメーションを実行
+
+
+    // 実際に行を消去する
+    let newField = field.filter((_, row) => !fullRows.includes(row));
+
     // 消去した行数分の新しい空の行を追加
-    for (let i = 0; i < linesCleared; i++) {
-        field.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
+    while (newField.length < PLAY_SCREEN_HEIGHT) {
+        newField.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
     }
 
-    return linesCleared;
+    // fieldを更新
+    field = newField;
+
 };
