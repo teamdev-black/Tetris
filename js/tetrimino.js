@@ -18,6 +18,9 @@ export function getCurrentTetrimino() {
     return currentTetrimino;
 }
 
+export function setIsLocking(bool) {
+    isLocking = bool;
+}
 
 export function getNextTetrimino() {
     if (tetriminoSequence.length === 0) {
@@ -26,8 +29,6 @@ export function getNextTetrimino() {
     const name = tetriminoSequence.pop();
     const { shape, color } = TETRIMINOS[name];
     const { column, row } = getInitialTetriminoPosition(shape);
-    // const column = Math.floor(PLAY_SCREEN_WIDTH / 2) - Math.ceil(shape[0].length / 2);
-    // const row = 0;
 
     return { name, shape, color, row, column };
 }
@@ -57,16 +58,15 @@ export function moveTetrimino(newRow, newColumn, newShape = null) {
     return true;
 }
 
-export function canMoveTetrimino(newRow, newColumn) {
-    const movedTetrimino = { ...currentTetrimino };
-    movedTetrimino.row = newRow;
-    movedTetrimino.column = newColumn;
-    if (checkCollision(movedTetrimino)) {
-        return false;
-    }
-    return true;
+export function canMoveTetrimino(newRow, newColumn, shape = null) {
+    const tetriminoToCheck = {
+        ...currentTetrimino,
+        row: newRow,
+        column: newColumn,
+        shape: shape || currentTetrimino.shape
+    };
+    return !checkCollision(tetriminoToCheck);
 }
-
 
 // テトリミノの移動操作
 export const moveLeft = () => moveTetrimino(currentTetrimino.row, currentTetrimino.column - 1);
@@ -83,10 +83,7 @@ export function getTetriminoDropPosition() {
 
 // ハードドロップ
 export function hardDrop() {
-    if (moveTetrimino(ghostTetriminoRow, currentTetrimino.column)) {
-        lockTetrimino();
-        currentTetrimino = null;
-    }
+    moveTetrimino(ghostTetriminoRow, currentTetrimino.column);
 }
 
 export function hold() {
@@ -120,8 +117,6 @@ function resetHoldCount() {
 }
 
 export async function lockTetrimino() {
-    console.log('Lock tetrimino start');
-    isLocking = true;
     const { shape, row, column, color } = currentTetrimino;
     shape.forEach((rowShape, r) => {
         rowShape.forEach((cell, c) => {
@@ -134,14 +129,8 @@ export async function lockTetrimino() {
             }
         });
     });
-    console.log('Tetrimino placed on field');
-    console.log('Clearing full lines');
     await clearFullLines();
-    console.log('Full lines cleared');
-    currentTetrimino = null;
     resetHoldCount();
-    console.log('Lock tetrimino end');
-    isLocking = false;
 }
 
 export function rotateTetrimino(clockwise = true) {

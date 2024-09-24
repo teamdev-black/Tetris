@@ -1,6 +1,6 @@
 import { DROP_SPEED } from './utils.js';
 import { initField,} from './board.js';
-import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino,} from './tetrimino.js';
+import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking,} from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
 import { checkGameOver, handleGameOver } from './score.js';
 
@@ -36,7 +36,7 @@ export async function gameLoop(currentTime) {
         if (canMoveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
             await normalDrop(currentTime);
         } else {
-            await lockTetrimino();
+            await performLock();
         }
     
     }
@@ -50,6 +50,22 @@ async function normalDrop(currentTime) {
         console.log('Normal drop', { currentTetrimino });
         lastDropTime = currentTime;
     }
+}
+
+async function performLock() {
+    setIsLocking(true);
+    await lockTetrimino();
+    setIsLocking(false);
+    setCurrentTetrimino(null);
+}
+
+export async function performHardDrop() {
+    if (!isLocking) {
+        const droppedRows = hardDrop();
+        await performLock();
+        return droppedRows;
+    }
+    return 0;
 }
 
 function addNextTetrimino() {
