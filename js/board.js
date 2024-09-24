@@ -1,6 +1,8 @@
 import { PLAY_SCREEN_WIDTH, PLAY_SCREEN_HEIGHT } from './utils.js';
+import { drawBlock } from './renderer.js';
 
 export let field = [];
+let FLASH_RATE = 150;
 
 export function initField() {
     field = Array(PLAY_SCREEN_HEIGHT).fill().map(() => Array(PLAY_SCREEN_WIDTH).fill(null));
@@ -20,22 +22,51 @@ export function checkCollision(tetrimino) {
     );
 }
 
-export const clearFullLines = () => {
-    let linesCleared = 0;
+const flashLines = (fullRows) => {
+    return new Promise(resolve => {
+        let flashCount = 4; // 点滅回数
+        let flashInterval = setInterval(() => {
+            fullRows.forEach(row => {
+                field[row] = field[row].map(cell => cell === null ? null : (cell === "flash" ? "flash-interval": "flash"))
 
-    // 1. 完全に埋まった行を検出し，消去するロジック
-    for (let row = PLAY_SCREEN_HEIGHT - 1; row >= 0; row--) {
+                // 各セルの状態に応じて描画を行う
+                field[row].forEach((cell, col) => {
+                    drawBlock(col, row, cell);
+                });
+            });
+            flashCount--;
+            if (flashCount === 0) {
+                clearInterval(flashInterval);
+                resolve(); // 点滅が終わったら次の処理へ
+            }
+        }, FLASH_RATE);
+    });
+};
+
+export const clearFullLines = async() => {
+    let fullRows = []
+    // 埋まっている行を特定
+    for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {
         if (field[row].every(cell => cell !== null)) {
-            // 埋まった行を削除
-            field.splice(row, 1);
-            linesCleared++;
+            fullRows.push(row);
         }
     }
 
+    if (fullRows.length === 0) return; // 埋まっている行がない場合は処理しない
+
+    
+    // Line消去アニメーションを実行
+    await flashLines(fullRows);
+
+    // 実際に行を消去する
+    let newField = field.filter((_, row) => !fullRows.includes(row));
+
     // 消去した行数分の新しい空の行を追加
-    for (let i = 0; i < linesCleared; i++) {
-        field.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
+    while (newField.length < PLAY_SCREEN_HEIGHT) {
+        newField.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
     }
 
-    return linesCleared;
+    // fieldを更新
+    field = newField;
+
 };

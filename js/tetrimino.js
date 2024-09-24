@@ -1,10 +1,11 @@
 import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
 
-let currentTetrimino = null;
+export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
 export let holdTetrimino = null;
 export let holdCount = 0;
+export let isLocking = false;
 let tetriminoSequence = [];
 
 
@@ -17,6 +18,9 @@ export function getCurrentTetrimino() {
     return currentTetrimino;
 }
 
+export function setIsLocking(bool) {
+    isLocking = bool;
+}
 
 export function getNextTetrimino() {
     if (tetriminoSequence.length === 0) {
@@ -25,8 +29,6 @@ export function getNextTetrimino() {
     const name = tetriminoSequence.pop();
     const { shape, color } = TETRIMINOS[name];
     const { column, row } = getInitialTetriminoPosition(shape);
-    // const column = Math.floor(PLAY_SCREEN_WIDTH / 2) - Math.ceil(shape[0].length / 2);
-    // const row = 0;
 
     return { name, shape, color, row, column };
 }
@@ -56,6 +58,15 @@ export function moveTetrimino(newRow, newColumn, newShape = null) {
     return true;
 }
 
+export function canMoveTetrimino(newRow, newColumn, shape = null) {
+    const tetriminoToCheck = {
+        ...currentTetrimino,
+        row: newRow,
+        column: newColumn,
+        shape: shape || currentTetrimino.shape
+    };
+    return !checkCollision(tetriminoToCheck);
+}
 
 // テトリミノの移動操作
 export const moveLeft = () => moveTetrimino(currentTetrimino.row, currentTetrimino.column - 1);
@@ -72,10 +83,7 @@ export function getTetriminoDropPosition() {
 
 // ハードドロップ
 export function hardDrop() {
-    if (moveTetrimino(ghostTetriminoRow, currentTetrimino.column)) {
-        lockTetrimino();
-        currentTetrimino = null;
-    }
+    moveTetrimino(ghostTetriminoRow, currentTetrimino.column);
 }
 
 export function hold() {
@@ -104,13 +112,11 @@ function resetTetriminoPosition(tetrimino) {
     };
 }
 
-
-
 function resetHoldCount() {
     holdCount = 0;
 }
 
-export function lockTetrimino() {
+export async function lockTetrimino() {
     const { shape, row, column, color } = currentTetrimino;
     shape.forEach((rowShape, r) => {
         rowShape.forEach((cell, c) => {
@@ -123,10 +129,8 @@ export function lockTetrimino() {
             }
         });
     });
-    clearFullLines();
-    currentTetrimino = null;
-    console.log(holdCount);
-    resetHoldCount(); // hold回数をリセット
+    await clearFullLines();
+    resetHoldCount();
 }
 
 export function rotateTetrimino(clockwise = true) {
