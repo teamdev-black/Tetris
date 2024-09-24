@@ -79,25 +79,31 @@ export function hardDrop() {
 }
 
 export function hold() {
-    if (holdTetrimino === null) {
-        holdTetrimino = { ...currentTetrimino };
-        currentTetrimino = null;
-        holdCount++;
-    } else if (holdCount === 0) {
-        let tempTetrimino = { ...holdTetrimino };
-        holdTetrimino = { ...currentTetrimino };
-        // 初期ホールドのみ機能しない
-        holdTetrimino.shape =  TETRIMINOS[holdTetrimino.name].shape;    
+    if (holdCount > 0) return; // 1回のみホールド可能
 
-        const {column, row} = getInitialTetriminoPosition(tempTetrimino.shape);
-        currentTetrimino = {
-            ...tempTetrimino,
-            column: column,
-            row: row,
-        };
-        holdCount++;
+    const newHoldTetrimino = { ...currentTetrimino };
+    newHoldTetrimino.shape = TETRIMINOS[newHoldTetrimino.name].shape;
+
+    if (holdTetrimino === null) {
+        holdTetrimino = newHoldTetrimino;
+        currentTetrimino = null; // 新しいテトリミノを生成するトリガー
+    } else {
+        currentTetrimino = resetTetriminoPosition(holdTetrimino);
+        holdTetrimino = newHoldTetrimino;
     }
+
+    holdCount++;
 }
+
+function resetTetriminoPosition(tetrimino) {
+    const { column, row } = getInitialTetriminoPosition(tetrimino.shape);
+    return {
+        ...tetrimino,
+        column,
+        row,
+    };
+}
+
 
 
 function resetHoldCount() {
@@ -119,6 +125,7 @@ export function lockTetrimino() {
     });
     clearFullLines();
     currentTetrimino = null;
+    console.log(holdCount);
     resetHoldCount(); // hold回数をリセット
 }
 
