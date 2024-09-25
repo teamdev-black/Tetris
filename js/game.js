@@ -44,6 +44,12 @@ export async function gameLoop(currentTime) {
     animationId = requestAnimationFrame(gameLoop);
 }
 
+// アニメーションを停止する関数
+export function stopGameLoop() {
+    // requestAnimationFrameを止めるメソッド
+    cancelAnimationFrame(animationId);
+}
+
 async function normalDrop(currentTime) {
     if (currentTime - lastDropTime > DROP_SPEED) {
         moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column);
