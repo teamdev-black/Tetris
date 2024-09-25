@@ -8,6 +8,23 @@ body {
   font-family: Arial, sans-serif;
 }
 
+#start-screen {
+  text-align: center;
+  padding: 20px;
+}
+
+#start-button {
+  font-size: 1.5em;
+  padding: 10px 20px;
+  margin: 20px 0;
+}
+
+#controls {
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: left;
+}
+
 #game-container {
   display: flex;
   gap: 20px;

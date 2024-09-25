@@ -1,11 +1,16 @@
-// main.js
-import { initGame, gameLoop } from './game.js';
+import { initGame, gameLoop, stopGameLoop } from './game.js';
 import { initInput } from './input.js';
+import { setupGameScreens } from './gameManager.js';
 
-function init() {
+// スタートボタンを押すことで実行される関数の集まり。
+function startGame() {
     initGame();
     initInput();
-    requestAnimationFrame(gameLoop);
+    gameLoop();
+}
+
+function init() {
+    setupGameScreens(startGame, stopGameLoop,);
 }
 
 init();
