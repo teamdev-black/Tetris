@@ -8,6 +8,10 @@ export let holdCount = 0;
 export let isLocking = false;
 let tetriminoSequence = [];
 
+export function initHold(){
+    holdTetrimino = null;
+    holdCount = 0;
+}
 
 export function setCurrentTetrimino(tetrimino) {
     currentTetrimino = tetrimino;
