@@ -2,9 +2,23 @@
 - XX:XX
 - w/uki, yuu
 
+
 # 9/25
 - 15:30-16:30
 - w/uki
+
+- yuu
+  - score:完了
+- uki
+  - 画面:完了
+  - Lv, Line画面
+- satoshi
+  - ライン消去画面: 完了
+  - Holdバグ修正: 完了
+  - LockDown: Todo
+  - SRS: Todo
+  - T-spin: Todo
+  - ScoreSystem improve: Todo
 
 # 9/24
 Pass
