@@ -1,7 +1,7 @@
 //game.js
 import { DROP_SPEED } from './utils.js';
-import { initField, clearFullLines } from './board.js';
-import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking } from './tetrimino.js';
+import { initField,clearFullLines} from './board.js';
+import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking, initHold} from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
 import { checkGameOver, handleGameOver, updateScore } from './score.js';
 
@@ -11,7 +11,13 @@ let nextTetriminos = [];
 
 export function initGame() {
     initField();
+    initHold();
+    initNext();
+    // initScore();
+}
 
+export function initNext(){
+    nextTetriminos = [];
     for (let i = 0; i < 5; i++) {
         nextTetriminos.push(getNextTetrimino());
     }
@@ -40,6 +46,12 @@ export async function gameLoop(currentTime) {
     }
     
     animationId = requestAnimationFrame(gameLoop);
+}
+
+// アニメーションを停止する関数
+export function stopGameLoop() {
+    // requestAnimationFrameを止めるメソッド
+    cancelAnimationFrame(animationId);
 }
 
 async function normalDrop(currentTime) {

@@ -7,37 +7,56 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- htmlのcanvas要素を使用 -->
-    <!-- <canvas id="canvas" width="300" height="660"></canvas> -->
-    <div id="game-container">
-        <div id="left-container">
-            <div id="hold-container">
-                <h3>HOLD</h3>
-                <canvas id="hold-canvas"></canvas>
-            </div>
-        </div>
-        <div id="center-container">
-            <canvas id="canvas"></canvas>
-            <div id="score-container">
-                <h3>SCORE</h3>
-                <p id="score">0</p>
-                <h3>LEVEL</h3>
-                <p id="level">1</p>
-            
-            </div>
-        </div>
-        <div id="right-container">
-            <div id="next-container">
-                <h3>NEXT</h3>
-                <canvas id="next-canvas-1" class="next-canvas large"></canvas>
-                <canvas id="next-canvas-2" class="next-canvas small"></canvas>
-                <canvas id="next-canvas-3" class="next-canvas small"></canvas>
-                <canvas id="next-canvas-4" class="next-canvas small"></canvas>
-                <canvas id="next-canvas-5" class="next-canvas small"></canvas>
-            </div>
+    <div id="start-screen">
+        <h1>テトリス</h1>
+        <button id="start-button">ゲーム開始</button>
+        <div id="controls">
+            <h2>操作方法</h2>
+            <ul>
+                <li>← → : 左右移動</li>
+                <li>↓ : 落下加速 (ソフトドロップ)</li>
+                <li>↑ or X: 時計回りに回転</li>
+                <li>Z : 反時計回りに回転</li>
+                <li>スペース : ハードドロップ</li>
+                <li>C or shift: ホールド</li>
+            </ul>
         </div>
     </div>
+
+
+    <div id="game-screen" style="display: none;">
+        <button id="home-button">ホームに戻る</button>
+        <div id="game-container">
+            <div id="left-container">
+                <div id="hold-container">
+                    <h3>HOLD</h3>
+                    <canvas id="hold-canvas"></canvas>
+                </div>
+            </div>
+            <div id="center-container">
+                <canvas id="canvas"></canvas>
+                <div id="score-container">
+                    <h3>SCORE</h3>
+                    <p id="score">0</p>
+                    <h3>LEVEL</h3>
+                    <p id="level">1</p>
+                </div>
+            </div>
+            <div id="right-container">
+                <div id="next-container">
+                    <h3>NEXT</h3>
+                    <canvas id="next-canvas-1" class="next-canvas large"></canvas>
+                    <canvas id="next-canvas-2" class="next-canvas small"></canvas>
+                    <canvas id="next-canvas-3" class="next-canvas small"></canvas>
+                    <canvas id="next-canvas-4" class="next-canvas small"></canvas>
+                    <canvas id="next-canvas-5" class="next-canvas small"></canvas>
+                </div>
+            </div>
+        </div>   
+    </div>    
     <script type="module" src="js/main.js"></script>
 </body>
 
 </html>
+
+
