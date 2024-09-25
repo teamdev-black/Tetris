@@ -1,3 +1,4 @@
+//utils.js
 export const BLOCK_SIZE = 30;
 export const PLAY_SCREEN_WIDTH = 10;
 export const PLAY_SCREEN_HEIGHT = 22;

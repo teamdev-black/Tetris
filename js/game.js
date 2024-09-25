@@ -1,8 +1,9 @@
+//game.js
 import { DROP_SPEED } from './utils.js';
-import { initField,} from './board.js';
-import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking,} from './tetrimino.js';
+import { initField, clearFullLines } from './board.js';
+import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking } from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
-import { checkGameOver, handleGameOver } from './score.js';
+import { checkGameOver, handleGameOver, updateScore } from './score.js';
 
 export let animationId;
 let lastDropTime = 0;
@@ -14,17 +15,15 @@ export function initGame() {
     for (let i = 0; i < 5; i++) {
         nextTetriminos.push(getNextTetrimino());
     }
-    setCurrentTetrimino(nextTetriminos.shift());
-    nextTetriminos.push(getNextTetrimino());
+    addNextTetrimino(); // 初期テトリミノを設定
 }
 
 export async function gameLoop(currentTime) {
-    
     drawPlayScreen();
     drawHoldTetrimino(holdTetrimino);
     drawNextTetriminos(nextTetriminos);
     
-    if (!isLocking && currentTetrimino === null) {
+    if (currentTetrimino === null) {
         console.log('Adding next tetrimino');
         addNextTetrimino();
         if (checkGameOver()) {
@@ -32,13 +31,12 @@ export async function gameLoop(currentTime) {
             return;
         }
         lastDropTime = currentTime;
-    } else if (currentTetrimino !== null ) {
+    } else {
         if (canMoveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
             await normalDrop(currentTime);
-        } else {
+        } else if (!isLocking) {
             await performLock();
         }
-    
     }
     
     animationId = requestAnimationFrame(gameLoop);
@@ -51,13 +49,25 @@ async function normalDrop(currentTime) {
         lastDropTime = currentTime;
     }
 }
-
 async function performLock() {
+    console.log('Entering performLock');
     setIsLocking(true);
-    await lockTetrimino();
+
+    const clearedLines = await lockTetrimino();
+    console.log('Tetrimino locked, cleared lines:', clearedLines);
+
+    if (clearedLines > 0) {
+        console.log('Updating score with cleared lines:', clearedLines);
+        updateScore(clearedLines);
+    } else {
+        console.log('No lines cleared, score not updated');
+    }
+
     setIsLocking(false);
     setCurrentTetrimino(null);
+    console.log('Exiting performLock');
 }
+
 
 export async function performHardDrop() {
     if (!isLocking) {

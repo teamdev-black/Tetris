@@ -1,3 +1,4 @@
+//tetrimino.js
 import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
 
@@ -129,9 +130,12 @@ export async function lockTetrimino() {
             }
         });
     });
-    await clearFullLines();
+    const clearedLines = await clearFullLines();
     resetHoldCount();
+    return clearedLines;  // 追加：クリアした行数を返す
 }
+
+
 
 export function rotateTetrimino(clockwise = true) {
     const { name, shape } = currentTetrimino;
