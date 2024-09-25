@@ -1,3 +1,4 @@
+// board.js
 import { PLAY_SCREEN_WIDTH, PLAY_SCREEN_HEIGHT } from './utils.js';
 import { drawBlock } from './renderer.js';
 
@@ -43,30 +44,32 @@ const flashLines = (fullRows) => {
     });
 };
 
-export const clearFullLines = async() => {
-    let fullRows = []
+export const clearFullLines = async () => {
+    let fullRows = [];
+    
     // 埋まっている行を特定
-    for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {
+    for (let row = PLAY_SCREEN_HEIGHT - 1; row >= 0; row--) {
         if (field[row].every(cell => cell !== null)) {
             fullRows.push(row);
         }
     }
 
-    if (fullRows.length === 0) return; // 埋まっている行がない場合は処理しない
+    if (fullRows.length === 0) {
+        console.log('No full rows, exiting clearFullLines');
+        return 0;
+    }
 
-    
     // Line消去アニメーションを実行
     await flashLines(fullRows);
 
     // 実際に行を消去する
-    let newField = field.filter((_, row) => !fullRows.includes(row));
-
-    // 消去した行数分の新しい空の行を追加
-    while (newField.length < PLAY_SCREEN_HEIGHT) {
-        newField.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
+    field = field.filter((_, index) => !fullRows.includes(index));
+    
+    // 新しい空の行を追加
+    while (field.length < PLAY_SCREEN_HEIGHT) {
+        field.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
     }
 
-    // fieldを更新
-    field = newField;
 
+    return fullRows.length;
 };

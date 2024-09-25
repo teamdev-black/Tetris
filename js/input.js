@@ -1,3 +1,4 @@
+// input.js
 import { moveLeft, moveRight, moveDown, hardDrop, rotateTetrimino, hold } from './tetrimino.js';
 
 export function initInput() {
@@ -18,3 +19,4 @@ function handleKeyDown(e) {
         case " ": hardDrop(); break;
     }
 }
+

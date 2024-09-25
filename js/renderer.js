@@ -1,3 +1,4 @@
+// renderer.js
 import { BLOCK_SIZE, CANVAS_WIDTH, CANVAS_HEIGHT, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field } from './board.js';
 import { getCurrentTetrimino, getTetriminoDropPosition, ghostTetriminoRow } from './tetrimino.js';
