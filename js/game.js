@@ -50,22 +50,15 @@ async function normalDrop(currentTime) {
     }
 }
 async function performLock() {
-    console.log('Entering performLock');
     setIsLocking(true);
 
     const clearedLines = await lockTetrimino();
-    console.log('Tetrimino locked, cleared lines:', clearedLines);
-
     if (clearedLines > 0) {
-        console.log('Updating score with cleared lines:', clearedLines);
         updateScore(clearedLines);
-    } else {
-        console.log('No lines cleared, score not updated');
-    }
+    } 
 
     setIsLocking(false);
     setCurrentTetrimino(null);
-    console.log('Exiting performLock');
 }
 
 
