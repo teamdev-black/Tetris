@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div id="space-background">
+        <div class="planet"></div> <!-- 背景に使用する球体デザイン -->
+        <div class="stars"></div>
+    </div>
+
     <div id="start-screen">
         <h1>テトリス</h1>
         <button id="start-button">ゲーム開始</button>
@@ -31,16 +36,16 @@
                 <div id="hold-container">
                     <h3>HOLD</h3>
                     <canvas id="hold-canvas"></canvas>
+                    <div id="score-container">
+                        <h3>SCORE</h3>
+                        <p id="score">0</p>
+                        <h3>LEVEL</h3>
+                        <p id="level">1</p>
+                    </div>
                 </div>
             </div>
             <div id="center-container">
                 <canvas id="canvas"></canvas>
-                <div id="score-container">
-                    <h3>SCORE</h3>
-                    <p id="score">0</p>
-                    <h3>LEVEL</h3>
-                    <p id="level">1</p>
-                </div>
             </div>
             <div id="right-container">
                 <div id="next-container">

@@ -12,10 +12,16 @@ const nextCanvases = [
     document.querySelector('#next-canvas-4'),
     document.querySelector('#next-canvas-5')
 ];
-
+// メインキャンバス
 const ctx = canvas.getContext('2d');
+
+// Holdキャンバス
 const holdCtx = holdCanvas.getContext('2d');
+// holdCtx.fillStyle = 'rgba(10, 25, 47, 0.7)';　一旦保留
+
+// Nextキャンバス
 const nextCtxs = nextCanvases.map(canvas => canvas.getContext('2d'));
+// nextCtxs.fillStyle = 'rgba(10, 25, 47, 0.7)';　一旦保留
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
@@ -33,7 +39,7 @@ const flashColors = {
 };
 
 export function drawPlayScreen() {
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = 'rgba(10, 25, 47, 0.7)'; // メインキャンバスの背景を調整
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {

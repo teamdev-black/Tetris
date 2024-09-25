@@ -3,14 +3,76 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-color: transparent;
   margin: 0;
   font-family: Arial, sans-serif;
+}
+
+canvas {
+  border: 2px solid rgba(173, 216, 230, 0.2);
+  background-color: rgba(10, 25, 47, 0.7);
+  box-shadow: 0 0 20px rgba(173, 216, 230, 0.3);
+}
+
+h3 {
+  margin-bottom: 10px;
+}
+
+.planet {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #1c3a6e 0%, #0a1930 70%);
+  box-shadow: inset 0 0 50px rgba(173, 216, 230, 0.2);
+  z-index: 0;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+/* 新しい宇宙テーマの背景のスタイル */
+#space-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0a192f, #20314f);
+}
+
+.stars {
+  z-index: -1;
+  position: absolute;
+  width: 100%;
+  height: 200%;
+  background-image: radial-gradient(
+      white,
+      rgba(255, 255, 255, 0.2) 2px,
+      transparent 40px
+    ),
+    radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px),
+    radial-gradient(white, rgba(255, 255, 255, 0.1) 2px, transparent 40px);
+  background-size: 550px 550px, 350px 350px, 250px 250px;
+  animation: twinkle 60s infinite linear;
+}
+
+@keyframes twinkle {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
 }
 
 #start-screen {
   text-align: center;
   padding: 20px;
+  color: white;
+  z-index: 1;
 }
 
 #start-button {
@@ -26,8 +88,16 @@ body {
 }
 
 #game-container {
+  position: relative;
+  z-index: 1;
+  /* 背景色を半透明にして宇宙背景が見えるようにする */
+  background-color: rgba(10, 25, 47, 0.7);
+  padding: 20px;
+  border-radius: 10px;
   display: flex;
+  align-items: center;
   gap: 20px;
+  height: 80vh;
 }
 
 #left-container,
@@ -44,18 +114,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: white;
 }
 
 #hold-canvas {
-  background-color: #333;
-  border: 2px solid #000;
   width: 120px;
   height: 120px;
 }
 
 .next-canvas {
-  background-color: #333;
-  border: 2px solid #000;
   margin-bottom: 10px;
 }
 
@@ -69,11 +136,6 @@ body {
   height: 80px;
 }
 
-h3 {
-  margin-bottom: 10px;
-  color: #333;
-}
-
 #score-container {
   text-align: center;
 }
@@ -81,6 +143,5 @@ h3 {
 #score {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
   margin: 0;
 }
