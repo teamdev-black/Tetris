@@ -155,11 +155,15 @@ h3 {
 }
 
 #home-button {
+  all: unset; /* 全てのデフォルトスタイルをリセット */
+}
+
+i {
   cursor: pointer;
   transition: all 0.4s ease;
 }
 
-#home-button:hover {
+i:hover {
   opacity: 0.5;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
