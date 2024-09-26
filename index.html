@@ -15,7 +15,7 @@
     <div id="start-screen">
         <h1>テトリス</h1>
         <button id="start-button">ゲーム開始</button>
-        <div id="controls">
+        <div id="key-rule">
             <h2>操作方法</h2>
             <ul>
                 <li>← → : 左右移動</li>
@@ -30,7 +30,6 @@
 
 
     <div id="game-screen" style="display: none;">
-        <button id="home-button">ホームに戻る</button>
         <div id="game-container">
             <div id="left-container">
                 <div id="hold-container">
@@ -57,8 +56,11 @@
                     <canvas id="next-canvas-5" class="next-canvas small"></canvas>
                 </div>
             </div>
+            <div id="controls">
+                <button id="home-button">ホームに戻る</button>
+            </div>
         </div>   
-    </div>    
+    </div>
     <script type="module" src="js/main.js"></script>
 </body>
 
