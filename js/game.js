@@ -3,7 +3,7 @@ import { DROP_SPEED } from './utils.js';
 import { initField,clearFullLines} from './board.js';
 import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking, initHold} from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
-import { checkGameOver, handleGameOver, updateScore } from './score.js';
+import { checkGameOver, handleGameOver, updateScore, initScore, initLines, initLevel } from './score.js';
 
 export let animationId;
 let lastDropTime = 0;
@@ -13,7 +13,9 @@ export function initGame() {
     initField();
     initHold();
     initNext();
-    // initScore();
+    initScore();
+    initLevel();
+    initLines();
 }
 
 export function initNext(){
