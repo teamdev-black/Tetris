@@ -137,13 +137,17 @@ h3 {
 }
 
 #controls {
-  /* display: flex; */
-  height: 100%;
+  margin-top: 50px;
 }
 
-#controls button {
-  /* display: block; */
-  height: 50;
+#home-button {
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+#home-button:hover {
+  opacity: 0.5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #score-container {
