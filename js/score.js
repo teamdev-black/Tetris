@@ -7,6 +7,8 @@ let score = 0;
 let level = 1;
 let linesCleared = 0;
 
+let line = document.querySelector("#line");
+
 export let isGameOver = false;
 
 export function getScore() {
@@ -25,6 +27,7 @@ export function updateScore(clearedLines) {
     const scoreIncrement = calculateScoreIncrement(clearedLines);
     score += scoreIncrement;
     linesCleared += clearedLines;
+    line.textContent = linesCleared //消したライン数をゲーム画面で表示
 
     checkLevelUp();
     updateScoreDisplay();
