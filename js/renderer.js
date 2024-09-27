@@ -17,11 +17,9 @@ const ctx = canvas.getContext('2d');
 
 // Holdキャンバス
 const holdCtx = holdCanvas.getContext('2d');
-// holdCtx.fillStyle = 'rgba(10, 25, 47, 0.7)';　一旦保留
 
 // Nextキャンバス
 const nextCtxs = nextCanvases.map(canvas => canvas.getContext('2d'));
-// nextCtxs.fillStyle = 'rgba(10, 25, 47, 0.7)';　一旦保留
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
@@ -107,7 +105,7 @@ export function drawNextTetriminos(nextTetriminos) {
 }
 
 function clearCanvas(ctx, size) {
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = 'rgba(10, 25, 47, 0.7)';
     ctx.fillRect(0, 0, size, size);
 }
 

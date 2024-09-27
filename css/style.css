@@ -9,7 +9,8 @@ body {
 }
 
 canvas {
-  border: 2px solid rgba(173, 216, 230, 0.2);
+  border: solid 3px #6091d3; /*線*/
+  border-radius: 10px; /*角の丸み*/
   background-color: rgba(10, 25, 47, 0.7);
   box-shadow: 0 0 20px rgba(173, 216, 230, 0.3);
 }
@@ -117,6 +118,19 @@ h3 {
   color: white;
 }
 
+#score-container div {
+  margin-top: 15px;
+  padding-right: 8px;
+  padding-left: 8px;
+  border: solid 3px #6091d3; /*線*/
+  border-radius: 10px; /*角の丸み*/
+  box-shadow: 0 0 20px rgba(173, 216, 230, 0.3);
+}
+
+#score-container #score {
+  margin-bottom: 10px;
+}
+
 #hold-canvas {
   width: 120px;
   height: 120px;
@@ -137,13 +151,21 @@ h3 {
 }
 
 #controls {
-  /* display: flex; */
-  height: 100%;
+  margin-top: 50px;
 }
 
-#controls button {
-  /* display: block; */
-  height: 50;
+#home-button {
+  all: unset; /* 全てのデフォルトスタイルをリセット */
+}
+
+i {
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+i:hover {
+  opacity: 0.5;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 #score-container {

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <div id="space-background">
@@ -36,10 +37,21 @@
                     <h3>HOLD</h3>
                     <canvas id="hold-canvas"></canvas>
                     <div id="score-container">
-                        <h3>SCORE</h3>
-                        <p id="score">0</p>
-                        <h3>LEVEL</h3>
-                        <p id="level">1</p>
+                        <div>
+                            <h3>SCORE</h3>
+                            <p id="score">0</p>
+                        </div>
+                        <div>
+                            <h3>LEVEL</h3>
+                            <p id="level">1</p>
+                        </div>
+                        <div>
+                            <h3>LINES</h3>
+                            <p id="line">0</p>
+                        </div>
+                    </div>
+                    <div id="controls">
+                       <button id="home-button"><i class="fa-solid fa-house fa-2x"></i></button>
                     </div>
                 </div>
             </div>
@@ -55,9 +67,6 @@
                     <canvas id="next-canvas-4" class="next-canvas small"></canvas>
                     <canvas id="next-canvas-5" class="next-canvas small"></canvas>
                 </div>
-            </div>
-            <div id="controls">
-                <button id="home-button">ホームに戻る</button>
             </div>
         </div>   
     </div>
