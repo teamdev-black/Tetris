@@ -1,6 +1,7 @@
 // board.js
 import { PLAY_SCREEN_WIDTH, PLAY_SCREEN_HEIGHT } from './utils.js';
 import { drawBlock } from './renderer.js';
+import { playSound } from './audio.js';
 
 export let field = [];
 let FLASH_RATE = 150;
@@ -70,6 +71,6 @@ export const clearFullLines = async () => {
         field.unshift(new Array(PLAY_SCREEN_WIDTH).fill(null));
     }
 
-
+    playSound('clear'); 
     return fullRows.length;
 };
