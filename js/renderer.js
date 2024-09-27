@@ -60,14 +60,39 @@ export function drawPlayScreen() {
 }
 
 export function drawBlock(x, y, color) {
+    const blockX = x * BLOCK_SIZE;
+    const blockY = y * BLOCK_SIZE;
+
     if (color === "flash" || color === "flash-interval") {
         ctx.fillStyle = flashColors[color]; // flash用の色
     } else {
         ctx.fillStyle = color;
         ctx.strokeStyle = '#555';
-        ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+
+        // 角丸の描画
+        ctx.beginPath();
+        ctx.moveTo(blockX + 2, blockY);
+        ctx.lineTo(blockX + BLOCK_SIZE - 2, blockY);
+        ctx.quadraticCurveTo(blockX + BLOCK_SIZE, blockY, blockX + BLOCK_SIZE, blockY + 2);
+        ctx.lineTo(blockX + BLOCK_SIZE, blockY + BLOCK_SIZE - 2);
+        ctx.quadraticCurveTo(blockX + BLOCK_SIZE, blockY + BLOCK_SIZE, blockX + BLOCK_SIZE - 2, blockY + BLOCK_SIZE);
+        ctx.lineTo(blockX + 2, blockY + BLOCK_SIZE);
+        ctx.quadraticCurveTo(blockX, blockY + BLOCK_SIZE, blockX, blockY + BLOCK_SIZE - 2);
+        ctx.lineTo(blockX, blockY + 2);
+        ctx.quadraticCurveTo(blockX, blockY, blockX + 2, blockY);
+        ctx.closePath();
+
+        // 塗りつぶしと輪郭の描画
+        ctx.fill();
+        ctx.stroke();
+
+        // 内側の光沢効果（box-shadowの代替）
+        const gradient = ctx.createLinearGradient(blockX, blockY, blockX, blockY + BLOCK_SIZE);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
     }
-    ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
 }
 
 function drawGrid(strokeStyle='#555') {
@@ -117,12 +142,39 @@ function drawTetriminoOnCanvas(ctx, tetrimino, centerX, centerY) {
     const offsetX = centerX - (shape[0].length * blockSize) / 2;
     const offsetY = centerY - (shape.length * blockSize) / 2;
 
+
     ctx.fillStyle = color;
     shape.forEach((row, y) => {
         row.forEach((value, x) => {
             if (value) {
-                ctx.fillRect(offsetX + x * blockSize, offsetY + y * blockSize, blockSize, blockSize);
-                ctx.strokeRect(offsetX + x * blockSize, offsetY + y * blockSize, blockSize, blockSize);
+            ctx.fillStyle = color;
+            ctx.strokeStyle = '#555';
+
+            const blockX = x * BLOCK_SIZE;
+            const blockY = y * BLOCK_SIZE;
+            // 角丸の描画
+            ctx.beginPath();
+            ctx.moveTo(blockX + 2, blockY);
+            ctx.lineTo(blockX + BLOCK_SIZE - 2, blockY);
+            ctx.quadraticCurveTo(blockX + BLOCK_SIZE, blockY, blockX + BLOCK_SIZE, blockY + 2);
+            ctx.lineTo(blockX + BLOCK_SIZE, blockY + BLOCK_SIZE - 2);
+            ctx.quadraticCurveTo(blockX + BLOCK_SIZE, blockY + BLOCK_SIZE, blockX + BLOCK_SIZE - 2, blockY + BLOCK_SIZE);
+            ctx.lineTo(blockX + 2, blockY + BLOCK_SIZE);
+            ctx.quadraticCurveTo(blockX, blockY + BLOCK_SIZE, blockX, blockY + BLOCK_SIZE - 2);
+            ctx.lineTo(blockX, blockY + 2);
+            ctx.quadraticCurveTo(blockX, blockY, blockX + 2, blockY);
+            ctx.closePath();
+
+            // 塗りつぶしと輪郭の描画
+            ctx.fill();
+            ctx.stroke();
+
+            // 内側の光沢効果（box-shadowの代替）
+            const gradient = ctx.createLinearGradient(blockX, blockY, blockX, blockY + BLOCK_SIZE);
+            gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = gradient;
+            ctx.fill();
             }
         });
     });
