@@ -34,8 +34,9 @@ export function getNextTetrimino() {
     const name = tetriminoSequence.pop();
     const { shape, color } = TETRIMINOS[name];
     const { column, row } = getInitialTetriminoPosition(shape);
+    const direction = 0; // 初期向きは0
 
-    return { name, shape, color, row, column };
+    return { name, shape, color, direction, row, column };
 }
 
 export function getInitialTetriminoPosition(shape) {
@@ -184,6 +185,12 @@ export function rotateTetrimino(clockwise = true) {
         );
     }
 
-    moveTetrimino(currentTetrimino.row, currentTetrimino.column, newShape);
+    let moved = moveTetrimino(currentTetrimino.row, currentTetrimino.column, newShape);
 
+    
+    if (moved) {
+        currentTetrimino.direction = clockwise ?
+        (currentTetrimino.direction + 1) % 4 :
+        ((currentTetrimino.direction - 1) % 4 + 4) % 4;
+    }
 }
