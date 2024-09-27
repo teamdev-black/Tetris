@@ -178,33 +178,10 @@ function getNormalRotationShape(name, shape, clockwise) {
     const iTetriminoSize = 4;
     let newShape;
     if (name === 'I') {
-        newShape = Array(iTetriminoSize).fill().map(() => Array(iTetriminoSize).fill(0));
         
-        if (clockwise) {
-            if (shape[1][0] === 1) { // 横長の場合
-                // 縦長に変更
-                for (let i = 0; i < iTetriminoSize; i++) {
-                    newShape[i][2] = 1;
-                }
-            } else { // 縦長の場合
-                // 横長に変更
-                for (let i = 0; i < iTetriminoSize; i++) {
-                    newShape[1][i] = 1;
-                }
-            }
-        } else { // 反時計回り
-            if (shape[0][1] === 1 || shape[0][2] === 1) { // 縦長の場合
-                // 横長に変更
-                for (let i = 0; i < iTetriminoSize; i++) {
-                    newShape[2][i] = 1;
-                }
-            } else { // 横長の場合
-                // 縦長に変更
-                for (let i = 0; i < iTetriminoSize; i++) {
-                    newShape[i][1] = 1;
-                }
-            }
-        }
+        let newDirection = getRotateDirection(clockwise);
+        newShape = getIShape(newDirection);
+        console.log(newShape)
     } else {
         // その他のテトリミノの回転処理
         newShape = shape.map((row, i) => 
@@ -213,6 +190,44 @@ function getNormalRotationShape(name, shape, clockwise) {
     }
     return newShape;
 }
+
+function getIShape(direction) {
+    switch (direction) {
+        case 0:
+            return [
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]
+            ];
+            break;
+        case 1:
+            return [
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0]
+            ];
+            break;
+        case 2:
+            return [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [1, 1, 1, 1],
+            [0, 0, 0, 0]
+            ];
+            break;
+        case 3:
+            return [
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0],
+            [0, 1, 0, 0]
+            ];
+            break;
+    }
+}
+
 
 function superRotation(clockwise) {
     // 回転前のミノの向き
@@ -314,8 +329,13 @@ function superRotation(clockwise) {
         return true;
     } else { // IミノのSRS
         // 1. 軸を左右に動かす
-        // 0が90度（B）の場合は右，-90度（D）の場合は左へ移動（枠にくっつく）
-        // 0が0度（A），180度（C）の場合は回転した方向の逆へ移動　0度は２マス移動
+        // 0が90度（1）の場合は右，-90度（3）の場合は左へ移動（枠にくっつく）
+        switch (newDirection) {
+            case 1:
+
+            case 3:
+        }
+        // 0が0度（0），180度（2）の場合は回転した方向の逆へ移動　0度は２マス移動
         if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
             // 2. 軸を左右に動かす
             // 0が90度（B）の場合は左，-90度（D）の場合は右へ移動（枠にくっつく）
