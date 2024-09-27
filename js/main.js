@@ -5,7 +5,6 @@ import { setupGameScreens } from './gameManager.js';
 // スタートボタンを押すことで実行される関数の集まり。
 function startGame() {
     initGame();
-    initInput();
     gameLoop();
 }
 
