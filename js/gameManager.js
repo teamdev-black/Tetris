@@ -19,3 +19,26 @@ export function setupGameScreens(startGameFunction, stopGameFunction,) {
         stopGameFunction(); // ゲームを停止・リセット
     });
 }
+
+// モーダルウィンドウの表示関数
+const controlBtn = document.querySelector('#control-btn');
+const modal = document.querySelector('#controlsModal');
+const closeBtn = document.querySelector('.close-btn');
+
+function showControls() {
+    modal.style.display = 'block';
+}
+
+function hideControls() {
+    modal.style.display = 'none';
+}
+
+export function setupModalEventListeners() {
+    controlBtn.addEventListener('click', showControls);
+    closeBtn.addEventListener('click', hideControls);
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+        hideControls();
+        }
+    });
+}
