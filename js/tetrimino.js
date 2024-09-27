@@ -312,5 +312,36 @@ function superRotation(clockwise) {
         }
         // 移動成功
         return true;
+    } else { // IミノのSRS
+        // 1. 軸を左右に動かす
+        // 0が90度（B）の場合は右，-90度（D）の場合は左へ移動（枠にくっつく）
+        // 0が0度（A），180度（C）の場合は回転した方向の逆へ移動　0度は２マス移動
+        if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
+            // 2. 軸を左右に動かす
+            // 0が90度（B）の場合は左，-90度（D）の場合は右へ移動（枠にくっつく）
+            // 0が0度（A），180度（C）の場合は回転した方向へ移動　180度は２マス移動
+
+            if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
+                // 3. 軸を上下に動かす
+                // 0が90度（B）の場合は1を下，-90度（D）の場合は1を上へ移動
+                // 0が0度（A），180度（C）の場合は
+                // 回転前のミノが右半分にある（B）なら1を上へ
+                // 回転前のミノが左半分にある（D）なら2を下へ移動
+                // 左回転なら２マス動かす
+                if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
+                    // 4. 軸を上下に動かす
+                    // 0が90度（B）の場合は2を上，-90度（D）の場合は2を下へ移動
+                    // 0が0度（A），180度（C）の場合は
+                    // 回転前のミノが右半分にある（B）なら2を下へ
+                    // 回転前のミノが左半分にある（D）なら1を上へ移動
+                    // 右回転なら２マス動かす
+                    if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
+                        return false;
+                    }
+                }
+
+            }
+        }
+        return true;
     }
 }
