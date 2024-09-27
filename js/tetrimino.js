@@ -175,7 +175,6 @@ function normalRotation(clockwise) {
 }
 
 function getNormalRotationShape(name, shape, clockwise) {
-    const iTetriminoSize = 4;
     let newShape;
     if (name === 'I') {
         
@@ -238,7 +237,6 @@ function superRotation(clockwise) {
 
     let movex = 0;  // X座標移動量
     let movey = 0;  // Y座標移動量
- 
     // Iミノ以外
     if (currentTetrimino.name !== 'I') {
         // 1. 軸を左右に動かす
@@ -328,33 +326,123 @@ function superRotation(clockwise) {
         // 移動成功
         return true;
     } else { // IミノのSRS
+        console.log(currentTetrimino.name, newShape);
+        // 1. 2. の動作パターンを保持する変数
+        let pattern1, pattern2;
         // 1. 軸を左右に動かす
-        // 0が90度（1）の場合は右，-90度（3）の場合は左へ移動（枠にくっつく）
         switch (newDirection) {
+            // 0が90度（1）の場合は右，-90度（3）の場合は左へ移動（枠にくっつく）
             case 1:
-
+                movex = 1;
+                break;
             case 3:
+                movex = -1;
+                break;
+            // 0が0度（0），180度（2）の場合は回転した方向の逆へ移動　0度は２マス移動
+            case 0:
+            case 2:
+                switch (clockwise) {
+                    case true: // 右回転
+                        movex = -1;
+                        break;
+                    case false: // 左回転
+                        movex = 1;
+                        break;
+                }
+                if (newDirection === 0) movex *= 2;
+                break;
         }
-        // 0が0度（0），180度（2）の場合は回転した方向の逆へ移動　0度は２マス移動
+        pattern1 = movex;
+        console.log("Pattern1 try movex:", movex);
         if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
             // 2. 軸を左右に動かす
-            // 0が90度（B）の場合は左，-90度（D）の場合は右へ移動（枠にくっつく）
-            // 0が0度（A），180度（C）の場合は回転した方向へ移動　180度は２マス移動
-
+            switch (newDirection) {
+                // 0が90度（1）の場合は左，-90度（D）の場合は右へ移動（枠にくっつく）
+                case 1:
+                    movex = 1;
+                    break;
+                case 3:
+                    movex = -1;
+                    break;
+                // 0が0度（A），180度（C）の場合は回転した方向へ移動　180度は２マス移動
+                case 0:
+                case 2:
+                    switch (clockwise) {
+                        case true: // 右回転
+                            movex = 1;
+                            break;
+                        case false: // 左回転
+                            movex = -1;
+                            break;
+                    }
+                    if (newDirection == 2) movex *= 2;   // 180度は2マス移動
+                    break;                    
+            }
+            pattern2 = movex;
+            console.log("Pattern2 try movex:", movex);
             if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
                 // 3. 軸を上下に動かす
-                // 0が90度（B）の場合は1を下，-90度（D）の場合は1を上へ移動
-                // 0が0度（A），180度（C）の場合は
-                // 回転前のミノが右半分にある（B）なら1を上へ
-                // 回転前のミノが左半分にある（D）なら2を下へ移動
-                // 左回転なら２マス動かす
+                switch (newDirection) {
+                    // 0が90度（1）の場合は1を下，-90度（3）の場合は1を上へ移動
+                    case 1:
+                        movex = pattern1;
+                        movey = +1;
+                        break;
+                    case 3:
+                        movex = pattern1;
+                        movey = -1;
+                    // 0が0度（0），180度（2）の場合は
+                    case 0:
+                    case 2:
+                        switch (currentDirection) {
+                            // 回転前のミノが右半分にある（B）なら1を上へ
+                            case 1:
+                                movex = pattern1;
+                                movey = -1;
+                                break;
+                            // 回転前のミノが左半分にある（D）なら2を下へ移動
+                            case 3:
+                                movex = pattern2;
+                                movey = 1;
+                        }
+                        // 左回転なら２マス動かす ??右回転かも? 
+                        if (!clockwise) {
+                            movey *= 2;
+                        }
+                }
+
                 if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
                     // 4. 軸を上下に動かす
-                    // 0が90度（B）の場合は2を上，-90度（D）の場合は2を下へ移動
-                    // 0が0度（A），180度（C）の場合は
-                    // 回転前のミノが右半分にある（B）なら2を下へ
-                    // 回転前のミノが左半分にある（D）なら1を上へ移動
-                    // 右回転なら２マス動かす
+                    switch (newDirection) {
+                        // 0が90度（1）の場合は2を上，-90度（3）の場合は2を下へ移動
+                        case 1:
+                            movex = pattern2;
+                            movey = -1;
+                            break;
+                        case 3:
+                            movex = pattern2;
+                            movey = 1;
+                            break;
+                        // 0が0度（A），180度（C）の場合は
+                        case 0:
+                        case 2:
+                            switch (currentDirection) {
+                                // 回転前のミノが右半分にある（1）なら2を下へ
+                                case 1:
+                                    movex = pattern2;
+                                    movey = 1;
+                                    break;
+                                // 回転前のミノが左半分にある（3）なら1を上へ移動
+                                case 3:
+                                    movex = pattern1;
+                                    movey = -1;
+                                    break;
+                            }
+                            // 右回転なら２マス動かす (左回転かも?)
+                            if (clockwise) {
+                                movey *= 2;
+                            }
+                    }
                     if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
                         return false;
                     }
