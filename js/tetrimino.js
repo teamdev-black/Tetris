@@ -1,6 +1,7 @@
 //tetrimino.js
 import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
+import { playSound } from './audio.js';
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
@@ -135,6 +136,7 @@ export async function lockTetrimino() {
             }
         });
     });
+    playSound('land');
     const clearedLines = await clearFullLines();
     resetHoldCount();
     return clearedLines;  // 追加：クリアした行数を返す
@@ -143,20 +145,22 @@ export async function lockTetrimino() {
 
 
 export function rotateTetrimino(clockwise = true) {
-
     // 通常の回転を試す
-    if (!normalRotation(clockwise)) {
-
-         // superRotationを試す
-        if (!superRotation(clockwise)) {
-            // どちらも回転できない場合: false
-            return false;
-        }
+    if (normalRotation(clockwise)) {
+        playSound('rotate');  // 回転成功時に効果音を再生
+        currentTetrimino.direction = getRotateDirection(clockwise);
+        return true;
     }
 
-    // 回転した場合
-    currentTetrimino.direction = getRotateDirection(clockwise)
-    return true;
+    // superRotationを試す
+    if (superRotation(clockwise)) {
+        playSound('rotate');  // 回転成功時に効果音を再生
+        currentTetrimino.direction = getRotateDirection(clockwise);
+        return true;
+    }
+
+    // どちらも回転できない場合: false
+    return false;
 }
 
 function getRotateDirection(clockwise) {
