@@ -8,6 +8,7 @@ import { checkGameOver, handleGameOver, updateScore, initScore, initLines, initL
 export let animationId;
 let lastDropTime = 0;
 let nextTetriminos = [];
+let isPaused = false; // ゲームを停止用の変数
 
 export function initGame() {
     initField();
@@ -30,6 +31,8 @@ export async function gameLoop(currentTime) {
     drawPlayScreen();
     drawHoldTetrimino(holdTetrimino);
     drawNextTetriminos(nextTetriminos);
+
+    if (isPaused) return;
     
     if (currentTetrimino === null) {
         console.log('Adding next tetrimino');
@@ -48,6 +51,17 @@ export async function gameLoop(currentTime) {
     }
     
     animationId = requestAnimationFrame(gameLoop);
+}
+
+
+export function pauseGame() {
+    isPaused = true;
+    cancelAnimationFrame(animationId);
+}
+
+export function resumeGame() {
+    isPaused = false;
+    requestAnimationFrame(gameLoop);
 }
 
 // アニメーションを停止する関数

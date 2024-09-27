@@ -47,8 +47,8 @@ h3 {
 
 .button-container {
   position: absolute;
-  top: 100px;
-  right: 300px;
+  top: 10%;
+  right: 20%;
 }
 
 #control-btn {

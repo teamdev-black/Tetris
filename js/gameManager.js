@@ -1,3 +1,5 @@
+import { pauseGame, resumeGame } from './game.js';
+
 // ゲームスタート、ゲームやり直しの関数
 export function setupGameScreens(startGameFunction, stopGameFunction,) {
     const startScreen = document.getElementById('start-screen');
@@ -34,11 +36,20 @@ function hideControls() {
 }
 
 export function setupModalEventListeners() {
-    controlBtn.addEventListener('click', showControls);
-    closeBtn.addEventListener('click', hideControls);
+    controlBtn.addEventListener('click', () => {
+        showControls();
+        pauseGame();  // ゲームを一時停止
+    });
+
+    closeBtn.addEventListener('click', () => {
+        hideControls();
+        resumeGame();  // ゲームを再開
+    });
+
     window.addEventListener('click', (event) => {
         if (event.target === modal) {
-        hideControls();
+            hideControls();
+            resumeGame();  // ゲームを再開
         }
     });
 }
