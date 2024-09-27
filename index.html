@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <div id="space-background">
@@ -15,7 +16,7 @@
     <div id="start-screen">
         <h1>テトリス</h1>
         <button id="start-button">ゲーム開始</button>
-        <div id="controls">
+        <div id="key-rule">
             <h2>操作方法</h2>
             <ul>
                 <li>← → : 左右移動</li>
@@ -30,17 +31,27 @@
 
 
     <div id="game-screen" style="display: none;">
-        <button id="home-button">ホームに戻る</button>
         <div id="game-container">
             <div id="left-container">
                 <div id="hold-container">
                     <h3>HOLD</h3>
                     <canvas id="hold-canvas"></canvas>
                     <div id="score-container">
-                        <h3>SCORE</h3>
-                        <p id="score">0</p>
-                        <h3>LEVEL</h3>
-                        <p id="level">1</p>
+                        <div>
+                            <h3>SCORE</h3>
+                            <p id="score">0</p>
+                        </div>
+                        <div>
+                            <h3>LEVEL</h3>
+                            <p id="level">1</p>
+                        </div>
+                        <div>
+                            <h3>LINES</h3>
+                            <p id="line">0</p>
+                        </div>
+                    </div>
+                    <div id="controls">
+                       <button id="home-button"><i class="fa-solid fa-house fa-2x"></i></button>
                     </div>
                 </div>
             </div>
@@ -58,7 +69,7 @@
                 </div>
             </div>
         </div>   
-    </div>    
+    </div>
     <script type="module" src="js/main.js"></script>
 </body>
 

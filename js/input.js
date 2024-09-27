@@ -31,10 +31,13 @@ function handleKeyDown(e) {
         case "Shift":
         case "c":
             hold();
-            // lockdownSystem.isLocked = true;
+
             break;
 
-        case " ": hardDrop(); break;
+        case " ": 
+            hardDrop();
+            lockdownSystem.isLocked = true;
+            break;
     }
 
     if (moved && lockdownSystem.isActive) {
@@ -44,7 +47,7 @@ function handleKeyDown(e) {
 
 class LockdownSystem {
     constructor() {
-        this.LOCKDOWN_DELAY = 2000; // 0.5秒
+        this.LOCKDOWN_DELAY = 500; // 0.5秒
         this.MAX_MOVES = 15;
         this.timer = null;
         this.moveCount = 0;
