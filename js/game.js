@@ -65,7 +65,7 @@ export function stopGameLoop() {
 async function normalDrop(currentTime) {
     if (currentTime - lastDropTime > DROP_SPEED) {
         moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column);
-        console.log('Normal drop', { currentTetrimino });
+        console.log('Normal drop', { currentTetrimino, DROP_SPEED });
         lastDropTime = currentTime;
     }
 }
