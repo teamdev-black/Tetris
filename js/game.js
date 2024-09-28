@@ -4,6 +4,7 @@ import { initField,clearFullLines} from './board.js';
 import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking, initHold} from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
 import { checkGameOver, handleGameOver, updateScore, initScore, initLines, initLevel } from './score.js';
+import { initInput, lockdownSystem } from './input.js';
 
 export let animationId;
 let lastDropTime = 0;
@@ -11,6 +12,7 @@ let nextTetriminos = [];
 let isPaused = false; // ゲームを停止用の変数
 
 export function initGame() {
+    initInput();
     initField();
     initHold();
     initNext();
@@ -35,7 +37,7 @@ export async function gameLoop(currentTime) {
     if (isPaused) return;
     
     if (currentTetrimino === null) {
-        console.log('Adding next tetrimino');
+        // tetriminoが空の場合,生成する
         addNextTetrimino();
         if (checkGameOver()) {
             handleGameOver();
@@ -43,10 +45,14 @@ export async function gameLoop(currentTime) {
         }
         lastDropTime = currentTime;
     } else {
+        // 操作中のtetriminoが存在する場合
         if (canMoveTetrimino(currentTetrimino.row + 1, currentTetrimino.column)) {
+            // 下に1行ドロップできる場合
             await normalDrop(currentTime);
-        } else if (!isLocking) {
-            await performLock();
+        } else if (lockdownSystem.isLocked) {
+                await performLock();
+        } else if (!lockdownSystem.isActive) {
+                lockdownSystem.startLockdown(currentTetrimino);
         }
     }
     
@@ -87,6 +93,7 @@ async function performLock() {
 
     setIsLocking(false);
     setCurrentTetrimino(null);
+    lockdownSystem.resetLockdown();
 }
 
 
@@ -103,4 +110,5 @@ function addNextTetrimino() {
     setCurrentTetrimino(nextTetriminos.shift());
     nextTetriminos.push(getNextTetrimino());
     console.log('Next tetrimino added', {currentTetrimino});
+    lockdownSystem.resetLockdown();
 }
