@@ -1,6 +1,7 @@
 // renderer.js
 import { BLOCK_SIZE, CANVAS_WIDTH, CANVAS_HEIGHT, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field } from './board.js';
+import { MINITSPINFLAG, TSPINFLAG } from './input.js';
 import { getCurrentTetrimino, getTetriminoDropPosition, ghostTetriminoRow } from './tetrimino.js';
 
 const canvas = document.getElementById('canvas');
@@ -20,6 +21,9 @@ const holdCtx = holdCanvas.getContext('2d');
 
 // Nextキャンバス
 const nextCtxs = nextCanvases.map(canvas => canvas.getContext('2d'));
+
+// tSpin effect Canvas
+const tSpinEffect = document.getElementById('t-spin-effect');
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
@@ -158,4 +162,28 @@ function drawGhostTetrimino(tetrimino) {
             }
         });
     });
+}
+
+
+
+export function showTSpinEffect(tSpinFlag, deleteRowNum) {
+    // tspinの表示文字を取得
+    let tSpinType = tSpinFlag === TSPINFLAG ? 'T-SPIN' : 'Mini-T';
+    let actionType = ' ';
+
+    if (deleteRowNum > 0) {
+        actionType = ['Single', 'Double', 'Triple'][deleteRowNum - 1] || ' ';
+    }
+
+    // htmlの要素を取得し、文字を変更
+    let tSpinEffect = document.getElementById('t-spin-container')
+    tSpinEffect.innerText = tSpinType + actionType;
+
+    // 表示
+    tSpinEffect.style.display = 'block';
+    
+    // 2秒後に非表示にする
+    setTimeout(() => {
+        tSpinEffect.style.display = 'none';
+    }, 2000);
 }
