@@ -2,12 +2,14 @@
 import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines } from './board.js';
 import { playSound } from './audio.js';
+import { checkTspin, useSpin } from './input.js'
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
 export let holdTetrimino = null;
 export let holdCount = 0;
 export let isLocking = false;
+export let lastSRSPattern = 0;
 let tetriminoSequence = [];
 
 export function initHold(){
@@ -137,7 +139,12 @@ export async function lockTetrimino() {
         });
     });
     playSound('land');
-    const clearedLines = await clearFullLines();
+    // T-spin判定
+    if (currentTetrimino.name === 'T' && useSpin) {
+        let tSpinFlag = checkTspin();
+        console.log(tSpinFlag === 2 ? 'mini-T-spin' : (tSpinFlag === 1 ? 't-spin' : 'no-t-spin'));
+    }
+    const clearedLines = await clearFullLines(); // Line消去アニメーション
     resetHoldCount();
     return clearedLines;  // 追加：クリアした行数を返す
 }
@@ -266,6 +273,7 @@ function superRotation(clockwise) {
                 }
                 break;
         }
+        lastSRSPattern++;
         if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
             // 2.その状態から軸を上下に動かす
             // 0が90度（B），-90度（D）の場合は上へ移動
@@ -280,6 +288,7 @@ function superRotation(clockwise) {
                     movey = 1;
                     break;
             }
+            lastSRSPattern++;
             if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
                 // 3.元に戻し、軸を上下に2マス動かす
                 // 0が90度（B），-90度（D）の場合は下へ移動
@@ -296,6 +305,7 @@ function superRotation(clockwise) {
                         movey = -2;
                         break;
                 }
+                lastSRSPattern++;
                 if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
                     // 4.その状態から軸を左右に動かす
                     // 0が90度（B）の場合は左，-90度（D）の場合は右へ移動
@@ -320,6 +330,7 @@ function superRotation(clockwise) {
                             }
                             break;
                     }
+                    lastSRSPattern++;
                     if (!moveTetrimino(currentTetrimino.row + movey, currentTetrimino.column + movex, newShape)) {
                         // 移動失敗
                         return false;
@@ -456,4 +467,8 @@ function superRotation(clockwise) {
         }
         return true;
     }
+}
+
+export function initLastSRSPattern() {
+    lastSRSPattern = 0;
 }
