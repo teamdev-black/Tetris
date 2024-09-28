@@ -9,6 +9,7 @@ import { initInput, lockdownSystem } from './input.js';
 export let animationId;
 let lastDropTime = 0;
 let nextTetriminos = [];
+let isPaused = false; // ゲームを停止用の変数
 
 export function initGame() {
     initInput();
@@ -32,6 +33,8 @@ export async function gameLoop(currentTime) {
     drawPlayScreen();
     drawHoldTetrimino(holdTetrimino);
     drawNextTetriminos(nextTetriminos);
+
+    if (isPaused) return;
     
     if (currentTetrimino === null) {
         // tetriminoが空の場合,生成する
@@ -54,6 +57,17 @@ export async function gameLoop(currentTime) {
     }
     
     animationId = requestAnimationFrame(gameLoop);
+}
+
+
+export function pauseGame() {
+    isPaused = true;
+    cancelAnimationFrame(animationId);
+}
+
+export function resumeGame() {
+    isPaused = false;
+    requestAnimationFrame(gameLoop);
 }
 
 // アニメーションを停止する関数
