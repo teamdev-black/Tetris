@@ -1,5 +1,5 @@
 //game.js
-import { DROP_SPEED } from './utils.js';
+import { DROP_SPEED } from './score.js';
 import { initField,clearFullLines} from './board.js';
 import { isLocking, moveTetrimino, canMoveTetrimino, lockTetrimino, getNextTetrimino, holdTetrimino, setCurrentTetrimino, currentTetrimino, setIsLocking, initHold} from './tetrimino.js';
 import { drawPlayScreen, drawHoldTetrimino, drawNextTetriminos } from './renderer.js';
@@ -79,7 +79,6 @@ export function stopGameLoop() {
 async function normalDrop(currentTime) {
     if (currentTime - lastDropTime > DROP_SPEED) {
         moveTetrimino(currentTetrimino.row + 1, currentTetrimino.column);
-        console.log('Normal drop', { currentTetrimino });
         lastDropTime = currentTime;
     }
 }

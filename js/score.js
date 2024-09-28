@@ -3,10 +3,11 @@ import { field } from './board.js';
 import { animationId } from './game.js';
 import { PLAY_SCREEN_WIDTH } from './utils.js';
 
+
 let score = 0;
 let level = 1;
 let linesCleared = 0;
-
+export let DROP_SPEED = 1000;
 let scoreElement = document.getElementById('score');
 let levelElement = document.getElementById('level');
 let line = document.querySelector("#line");
@@ -66,11 +67,14 @@ function calculateScoreIncrement(clearedLines) {
 }
 
 function checkLevelUp() {
-    const newLevel = Math.floor(linesCleared / 10) + 1;
+    const newLevel = Math.min(15, Math.floor(linesCleared / 10) + 1);
     if (newLevel > level) {
         level = newLevel;
-        console.log('Level up! New level:', level);
+        updateDropSpeed(level);
     }
+}
+function updateDropSpeed(level) {
+    DROP_SPEED = Math.floor(1000 * Math.pow(0.8 - ((level - 1) * 0.007), level - 1));
 }
 
 function updateScoreDisplay() {
