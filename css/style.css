@@ -368,6 +368,7 @@ h3 {
 
 #home-container {
   color: white;
+  margin-top: 50px;
 }
 
 #home-button {
@@ -379,7 +380,7 @@ h3 {
   transition: all 0.4s ease;
 }
 
-#home-container i:hover {
+#home-button i:hover {
   opacity: 0.5;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
