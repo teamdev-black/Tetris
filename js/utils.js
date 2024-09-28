@@ -4,7 +4,7 @@ export const PLAY_SCREEN_WIDTH = 10;
 export const PLAY_SCREEN_HEIGHT = 22;
 export const CANVAS_WIDTH = BLOCK_SIZE * PLAY_SCREEN_WIDTH;
 export const CANVAS_HEIGHT = BLOCK_SIZE * PLAY_SCREEN_HEIGHT;
-export let DROP_SPEED = 1000; // 初期値は1000ms
+
 
 // テトリミノの定義
 export const TETRIMINOS = {

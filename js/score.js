@@ -2,13 +2,12 @@ import { getCurrentTetrimino } from './tetrimino.js';
 import { field } from './board.js';
 import { animationId } from './game.js';
 import { PLAY_SCREEN_WIDTH } from './utils.js';
-import {  DROP_SPEED  } from './utils.js';
 
 
 let score = 0;
 let level = 1;
 let linesCleared = 0;
-
+export let DROP_SPEED = 1000;
 let scoreElement = document.getElementById('score');
 let levelElement = document.getElementById('level');
 let line = document.querySelector("#line");
@@ -72,7 +71,6 @@ function checkLevelUp() {
     if (newLevel > level) {
         level = newLevel;
         updateDropSpeed(level);
-        console.log('Level up! New level:', level, 'New DROP_SPEED:', DROP_SPEED);
     }
 }
 function updateDropSpeed(level) {
