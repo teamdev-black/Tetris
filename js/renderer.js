@@ -169,13 +169,15 @@ function drawGhostTetrimino(tetrimino) {
 export function showTSpinEffect(tSpinFlag, deleteRowNum) {
     // tspinの表示文字を取得
     let tSpinType = tSpinFlag === TSPINFLAG ? 'T-SPIN' : 'Mini-T';
-    let actionType = '';
+    let actionType = ' ';
 
     if (deleteRowNum > 0) {
-        actionType = ['Single', 'Double', 'Triple'][deleteRowNum - 1] || '';
+        actionType = ['Single', 'Double', 'Triple'][deleteRowNum - 1] || ' ';
     }
 
     // htmlの要素を取得し、文字を変更
+    let tSpinEffect = document.getElementById('t-spin-container')
+    tSpinEffect.innerText = tSpinType + actionType;
 
     // 表示
     tSpinEffect.style.display = 'block';
