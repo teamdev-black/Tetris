@@ -70,11 +70,28 @@ export function drawBlock(x, y, color) {
 
 function drawGrid(strokeStyle='#555') {
     ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = 1;  // Set default line width for grid
+
+    // Draw the regular grid
     for (let row = 0; row < PLAY_SCREEN_HEIGHT; row++) {
         for (let col = 0; col < PLAY_SCREEN_WIDTH; col++) {
             ctx.strokeRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
         }
     }
+    
+    // Draw thick line at the specified row
+    let thickLineRow = 2, thickLineColor = '#FFFFFF', thickLineWidth = 3;
+    ctx.beginPath();  // Start a new path for the thick line
+    ctx.moveTo(0, thickLineRow * BLOCK_SIZE);
+    ctx.lineTo(PLAY_SCREEN_WIDTH * BLOCK_SIZE, thickLineRow * BLOCK_SIZE);
+    ctx.strokeStyle = thickLineColor;
+    ctx.lineWidth = thickLineWidth;
+    ctx.stroke();
+
+    // Reset to default styles
+    ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = 1;
+
 }
 
 function drawTetrimino(tetrimino) {
