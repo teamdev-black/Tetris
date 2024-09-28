@@ -395,20 +395,3 @@ h3 {
 }
 
 /* t-Spin-effect */
-#t-spin-effect {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 24px;
-  font-weight: bold;
-  color: #FFD700;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-  display: none;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-}

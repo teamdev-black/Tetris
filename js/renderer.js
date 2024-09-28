@@ -165,34 +165,23 @@ function drawGhostTetrimino(tetrimino) {
 }
 
 
-export function showTSpinEffect(tSpinFlag, deleteRowNum) {
-    let tSpinString = '';
-    if (tSpinFlag == TSPINFLAG) {
-        tSpinString = 'T-SPIN';
-    } else if (tSpinFlag === MINITSPINFLAG) {
-        tSpinString = 'Mini-T-SPIN';
-    }
-    if (deleteRowNum > 0) {
-        switch (deleteRowNum) {
-            case 1:
-                tSpinString += ' Single';
-                break;
-            case 2:
-                tSpinString += ' Double';
-                break;
-            case 3:
-                tSpinString += ' Triple';
-                break;
-        }
-    }
-    tSpinEffect.innerHTML = tSpinString;
 
+export function showTSpinEffect(tSpinFlag, deleteRowNum) {
+    // tspinの表示文字を取得
+    let tSpinType = tSpinFlag === TSPINFLAG ? 'T-SPIN' : 'Mini-T';
+    let actionType = '';
+
+    if (deleteRowNum > 0) {
+        actionType = ['Single', 'Double', 'Triple'][deleteRowNum - 1] || '';
+    }
+
+    // htmlの要素を取得し、文字を変更
+
+    // 表示
     tSpinEffect.style.display = 'block';
-    tSpinEffect.style.animation = 'none';
-    tSpinEffect.offsetHeight; // リフロー
-    tSpinEffect.style.animation = 'fadeInOut 1s ease-in-out';
     
+    // 2秒後に非表示にする
     setTimeout(() => {
         tSpinEffect.style.display = 'none';
-    }, 1000);
+    }, 2000);
 }
