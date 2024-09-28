@@ -1,6 +1,7 @@
 // renderer.js
 import { BLOCK_SIZE, CANVAS_WIDTH, CANVAS_HEIGHT, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field } from './board.js';
+import { MINITSPINFLAG, TSPINFLAG } from './input.js';
 import { getCurrentTetrimino, getTetriminoDropPosition, ghostTetriminoRow } from './tetrimino.js';
 
 const canvas = document.getElementById('canvas');
@@ -20,6 +21,9 @@ const holdCtx = holdCanvas.getContext('2d');
 
 // Nextキャンバス
 const nextCtxs = nextCanvases.map(canvas => canvas.getContext('2d'));
+
+// tSpin effect Canvas
+const tSpinEffect = document.getElementById('t-spin-effect');
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
@@ -158,4 +162,37 @@ function drawGhostTetrimino(tetrimino) {
             }
         });
     });
+}
+
+
+export function showTSpinEffect(tSpinFlag, deleteRowNum) {
+    let tSpinString = '';
+    if (tSpinFlag == TSPINFLAG) {
+        tSpinString = 'T-SPIN';
+    } else if (tSpinFlag === MINITSPINFLAG) {
+        tSpinString = 'Mini-T-SPIN';
+    }
+    if (deleteRowNum > 0) {
+        switch (deleteRowNum) {
+            case 1:
+                tSpinString += ' Single';
+                break;
+            case 2:
+                tSpinString += ' Double';
+                break;
+            case 3:
+                tSpinString += ' Triple';
+                break;
+        }
+    }
+    tSpinEffect.innerHTML = tSpinString;
+
+    tSpinEffect.style.display = 'block';
+    tSpinEffect.style.animation = 'none';
+    tSpinEffect.offsetHeight; // リフロー
+    tSpinEffect.style.animation = 'fadeInOut 1s ease-in-out';
+    
+    setTimeout(() => {
+        tSpinEffect.style.display = 'none';
+    }, 1000);
 }

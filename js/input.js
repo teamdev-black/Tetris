@@ -5,8 +5,8 @@ import { PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 
 export let lockdownSystem;
 export let useSpin = false;
-const TSPINFLAG = 1;
-const MINITSPINFLAG = 2;
+export const TSPINFLAG = 1;
+export const MINITSPINFLAG = 2;
 
 export function initInput() {
     document.addEventListener('keydown', handleKeyDown);
@@ -61,27 +61,22 @@ export function checkTspin() {
 
     for (let i = 0; i < 4; i++) {
         let blockNum = (i + currentTetrimino.direction) % 4;
-        console.log('blockNum: ', blockNum);
 
         // 周囲の空間チェック
         let y = currentTetrimino.row + point[blockNum][0];
         let x = currentTetrimino.column + point[blockNum][1];
         if (x < 0 || x >= PLAY_SCREEN_WIDTH || y >= PLAY_SCREEN_HEIGHT || y < 0) {
             count++;
-            console.log('wall', field[y][x]);
             continue;
         } 
         if (field[y][x]) { 
             count++;
-            console.log('mino', field[y][x]);
             continue;
         }
         if (i === 0 || i === 1) {
             // AかBが空白ならminiTspinFlagをTrue
-            console.log('blankcheck:', field[y][x]);
             // if(!field[y][x]) {
             miniFlag = true;
-            console.log('miniFlag: ', miniFlag);
         }
     }
 

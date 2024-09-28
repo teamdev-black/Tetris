@@ -45,7 +45,7 @@ const flashLines = (fullRows) => {
     });
 };
 
-export const clearFullLines = async () => {
+export function getFullLines() {
     let fullRows = [];
     
     // 埋まっている行を特定
@@ -59,7 +59,13 @@ export const clearFullLines = async () => {
         console.log('No full rows, exiting clearFullLines');
         return 0;
     }
+    return fullRows;
+}
 
+export const clearFullLines = async (fullRows) => {
+    if (fullRows === 0) {
+        return 0;
+    }
     // Line消去アニメーションを実行
     await flashLines(fullRows);
 
