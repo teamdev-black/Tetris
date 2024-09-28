@@ -19,19 +19,6 @@ h3 {
   margin-bottom: 10px;
 }
 
-.planet {
-  position: absolute;
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #1c3a6e 0%, #0a1930 70%);
-  box-shadow: inset 0 0 50px rgba(173, 216, 230, 0.2);
-  z-index: 0;
-  top: 50%;
-  left: 70%;
-  transform: translate(-50%, -50%);
-}
-
 /* 新しい宇宙テーマの背景のスタイル */
 #space-background {
   position: fixed;
@@ -44,7 +31,107 @@ h3 {
   background: linear-gradient(135deg, #0a192f, #20314f);
 }
 
-.stars {
+.planet {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #1c3a6e 0%, #0a1930 70%);
+  box-shadow: inset 0 0 50px rgba(173, 216, 230, 0.2);
+  z-index: 0;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.button-container {
+  position: absolute;
+  top: 10%;
+  right: 20%;
+}
+
+#control-btn {
+  font-size: 1.8rem;
+  color: greenyellow;
+  cursor: pointer;
+}
+
+#control-btn:hover i {
+  color: green;
+  transition: all 0.4s ease;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.modal-content {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 80vh; /* ビューポートの高さの80%に制限 */
+  overflow-y: auto; /* 内容が多い場合にスクロール可能に */
+}
+
+.controls-title {
+  text-align: center;
+  color: #00ff00;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.control-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px 0;
+}
+
+.control-icon {
+  color: #e0e0ff;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 255, 0, 0.2);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  min-width: 40px;
+}
+
+.control-description {
+  flex-grow: 1;
+  color: #e0e0ff;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close-btn:hover {
+  color: #00ff00;
+}
+
+.star {
   z-index: -1;
   position: absolute;
   width: 100%;
@@ -57,7 +144,8 @@ h3 {
     radial-gradient(white, rgba(255, 255, 255, 0.15) 1px, transparent 30px),
     radial-gradient(white, rgba(255, 255, 255, 0.1) 2px, transparent 40px);
   background-size: 550px 550px, 350px 350px, 250px 250px;
-  animation: twinkle 60s infinite linear;
+  background-repeat: repeat, repeat, repeat; /* starがループ */
+  animation: twinkle 55s infinite linear;
 }
 
 @keyframes twinkle {
@@ -76,16 +164,144 @@ h3 {
   z-index: 1;
 }
 
-#start-button {
-  font-size: 1.5em;
-  padding: 10px 20px;
-  margin: 20px 0;
+/* スタート画面のタイトルスタイル */
+.tetris-title {
+  font-size: 6rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  text-shadow: 3px 3px 0px #00ffff, -3px -3px 0px #ff00ff,
+    0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5),
+    0 0 30px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(45deg, #00ffff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  animation: pulse 3s infinite alternate;
+}
+.tetris-title::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: linear-gradient(45deg, #ff00ff, #00ffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.5;
+  filter: blur(1px);
+}
+.tetris-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -2;
+  color: #ffffff;
+  opacity: 0.1;
+  filter: blur(3px);
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
 }
 
-#key-rule {
-  max-width: 300px;
+/* スタート画面のボタンスタイル */
+
+.animated-button {
   margin: 0 auto;
-  text-align: left;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 36px;
+  border: 4px solid;
+  border-color: transparent;
+  font-size: 16px;
+  background-color: inherit;
+  border-radius: 100px;
+  font-weight: 600;
+  color: greenyellow;
+  box-shadow: 0 0 0 2px greenyellow;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button svg {
+  position: absolute;
+  width: 24px;
+  fill: greenyellow;
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .arr-1 {
+  right: 16px;
+}
+
+.animated-button .arr-2 {
+  left: -25%;
+}
+
+.animated-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  background-color: greenyellow;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .text {
+  position: relative;
+  z-index: 1;
+  transform: translateX(-12px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button:hover {
+  box-shadow: 0 0 0 12px transparent;
+  color: #212121;
+  border-radius: 12px;
+}
+
+.animated-button:hover .arr-1 {
+  right: -25%;
+}
+
+.animated-button:hover .arr-2 {
+  left: 16px;
+}
+
+.animated-button:hover .text {
+  transform: translateX(12px);
+}
+
+.animated-button:hover svg {
+  fill: #212121;
+}
+
+.animated-button:active {
+  scale: 0.95;
+  box-shadow: 0 0 0 4px greenyellow;
+}
+
+.animated-button:hover .circle {
+  width: 220px;
+  height: 220px;
+  opacity: 1;
 }
 
 #game-container {
@@ -150,7 +366,7 @@ h3 {
   height: 80px;
 }
 
-#controls {
+#home {
   margin-top: 50px;
 }
 
@@ -158,12 +374,12 @@ h3 {
   all: unset; /* 全てのデフォルトスタイルをリセット */
 }
 
-i {
+#home i {
   cursor: pointer;
   transition: all 0.4s ease;
 }
 
-i:hover {
+#home i:hover {
   opacity: 0.5;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }

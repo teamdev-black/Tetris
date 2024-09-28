@@ -1,6 +1,6 @@
 import { initGame, gameLoop, stopGameLoop } from './game.js';
 import { initInput } from './input.js';
-import { setupGameScreens } from './gameManager.js';
+import { setupGameScreens,setupModalEventListeners } from './gameManager.js';
 import { loadSounds,playBGM,stopBGM} from './audio.js';
 
 // スタートボタンを押すことで実行される関数の集まり。
@@ -15,8 +15,9 @@ function stopGame() {
 }
 
 function init() {
+    setupGameScreens(startGame, stopGameLoop);
+    setupModalEventListeners();
     loadSounds();
-    setupGameScreens(startGame, stopGameLoop,);
 }
 
 init();

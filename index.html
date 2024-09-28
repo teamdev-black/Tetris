@@ -8,25 +8,70 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+    <!-- ?アイコンのボタン -->
+    <div class="button-container">
+        <div id="control-btn">
+            <i class="fas fa-question-circle"></i>
+        </div>
+    </div>
+
+    <div id="controlsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 class="controls-title">HOW TO PLAY</h2>
+            <div class="control-item">
+                <div class="control-icon">← →</div>
+                <div class="control-description">Move left / right</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">↓</div>
+                <div class="control-description">Soft drop</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">↑</div>
+                <div class="control-description">Rotate clockwise</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">X</div>
+                <div class="control-description">Rotate clockwise</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">Z</div>
+                <div class="control-description">Rotate counterclockwise</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">C</div>
+                <div class="control-description">Hold piece</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">␣</div>
+                <div class="control-description">Hard drop</div>
+            </div>
+        </div>
+    </div>
+
     <div id="space-background">
-        <div class="planet"></div> <!-- 背景に使用する球体デザイン -->
-        <div class="stars"></div>
+        <div class="planet"> <!-- 背景に使用する球体デザイン -->
+        </div>
+        <div class="star"></div>
     </div>
 
     <div id="start-screen">
-        <h1>テトリス</h1>
-        <button id="start-button">ゲーム開始</button>
-        <div id="key-rule">
-            <h2>操作方法</h2>
-            <ul>
-                <li>← → : 左右移動</li>
-                <li>↓ : 落下加速 (ソフトドロップ)</li>
-                <li>↑ or X: 時計回りに回転</li>
-                <li>Z : 反時計回りに回転</li>
-                <li>スペース : ハードドロップ</li>
-                <li>C or shift: ホールド</li>
-            </ul>
-        </div>
+        <h1 class="tetris-title" data-text="Tetris">Tetris</h1>
+        <button id="start-button" class="animated-button">
+          <svg viewBox="0 0 24 24" class="arr-2" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+            ></path>
+          </svg>
+          <span class="text">PLAY NOW </span>
+          <span class="circle"></span>
+          <svg viewBox="0 0 24 24" class="arr-1" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"
+            ></path>
+          </svg>
+        </button>
     </div>
 
 
@@ -50,7 +95,7 @@
                             <p id="line">0</p>
                         </div>
                     </div>
-                    <div id="controls">
+                    <div id="home">
                        <button id="home-button"><i class="fa-solid fa-house fa-2x"></i></button>
                     </div>
                 </div>
@@ -70,6 +115,7 @@
             </div>
         </div>   
     </div>
+    
     <script type="module" src="js/main.js"></script>
 </body>
 
