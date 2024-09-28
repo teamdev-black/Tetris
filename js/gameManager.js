@@ -27,15 +27,17 @@ export function setupGameScreens(startGameFunction, stopGameFunction,) {
     });
 }
 
-// モーダルウィンドウの表示関数
+
 const controlBtn = document.querySelector('#control-btn');
 const modal = document.querySelector('#controlsModal');
 const closeBtn = document.querySelector('.close-btn');
 
+// モーダルウィンドウの表示関数
 function showControls() {
     modal.style.display = 'block';
 }
 
+// モーダルウィンドウを非表示にする関数
 function hideControls() {
     modal.style.display = 'none';
 }

@@ -395,4 +395,76 @@ h3 {
   margin: 0;
 }
 
+/* combo */
 /* t-Spin-effect */
+/* tetris */
+
+#game-over {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#game-over-container {
+  background-color: rgba(10, 25, 47, 0.9);
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+#game-over h2 {
+  font-size: 48px;
+  color: #ff0000;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+#game-over p {
+  font-size: 24px;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+#close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#close-button:hover {
+  color: #ff0000;
+}
+
+#game-over-container {
+  position: relative;
+  /* 他の既存のスタイル */
+}
+
+#restart-button {
+  font-size: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#restart-button:hover {
+  background-color: green;
+}
