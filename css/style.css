@@ -366,20 +366,20 @@ h3 {
   height: 80px;
 }
 
-#home {
-  margin-top: 50px;
+#home-container {
+  color: white;
 }
 
 #home-button {
   all: unset; /* 全てのデフォルトスタイルをリセット */
 }
 
-#home i {
+#home-container i {
   cursor: pointer;
   transition: all 0.4s ease;
 }
 
-#home i:hover {
+#home-container i:hover {
   opacity: 0.5;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
