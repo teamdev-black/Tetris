@@ -3,8 +3,8 @@ import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines, getFullLines } from './board.js';
 import { playSound } from './audio.js';
 import { checkTspin, useSpin } from './input.js'
-import { showComboEffect, showTSpinEffect, showTetrisEffect } from './renderer.js'
-import { getComboCount } from './score.js';
+import { showBackToBackEffect, showComboEffect, showTSpinEffect, showTetrisEffect } from './renderer.js'
+import { getComboCount, getIsBackToBack, setIsTetris, setIsTspin, setBeforeTetrisAndTspin } from './score.js';
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
@@ -151,15 +151,23 @@ export async function lockTetrimino() {
     }
     // Combo判定
     let comboCount = getComboCount(fullRows);
+    // Back-To-Back 判定
 
     if (fullRows.length === 4) {
         // tetris animation
         showTetrisEffect();
+        setIsTetris(true);
     } else if (tSpinFlag > 0) {
         showTSpinEffect(tSpinFlag, fullRows.length);
+        setIsTspin(true);
     }
     // Combo Animation
     if (comboCount > 0) showComboEffect(comboCount);
+
+    // Back-To-Back Animation
+    let isBackToBack = getIsBackToBack();
+    if (fullRows.length > 0) setBeforeTetrisAndTspin();
+    if (isBackToBack) showBackToBackEffect();
 
     const clearedLines = await clearFullLines(fullRows); // Line消去アニメーション
     resetHoldCount();
