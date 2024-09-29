@@ -1,6 +1,6 @@
 import { getCurrentTetrimino } from './tetrimino.js';
 import { field } from './board.js';
-import { animationId } from './game.js';
+import { animationId, initGame, gameLoop } from './game.js';
 import { PLAY_SCREEN_WIDTH } from './utils.js';
 
 
@@ -148,10 +148,36 @@ export function checkGameOver() {
 
 export function handleGameOver() {
     isGameOver = true;
-    console.log("Game Over");
     cancelAnimationFrame(animationId); // アニメーションループを停止
     
     // ゲームオーバー画面を表示
+    const gameOverScreen = document.getElementById('game-over');
+    const finalScoreElement = document.getElementById('final-score');
+    
+    finalScoreElement.textContent = score; // 最終スコアを表示
+    gameOverScreen.style.display = 'flex'; // ゲームオーバー画面を表示
+
+    // リスタートボタンのイベントリスナーを設定
+    const restartButton = document.getElementById('restart-button');
+    restartButton.addEventListener('click', restartGame);
+
+    // クローズボタンのイベントリスナーを設定
+    const closeButton = document.getElementById('close-button');
+    closeButton.addEventListener('click', closeGameOver);
+}
+
+function restartGame() {
+    const gameOverScreen = document.getElementById('game-over');
+    gameOverScreen.style.display = 'none'; // ゲームオーバー画面を非表示
+    
+    // ゲームをリセットして再開
+    initGame();
+    gameLoop();
+}
+
+function closeGameOver() {
+    const gameOverScreen = document.getElementById('game-over');
+    gameOverScreen.style.display = 'none'; // ゲームオーバー画面を非表示
 }
 
 

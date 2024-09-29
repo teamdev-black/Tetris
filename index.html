@@ -96,17 +96,16 @@
                             <p id="line">0</p>
                         </div>
                     </div>
-                    <div id="combo-container">
-                        <p>(仮)combo</p>
-                    </div>
-                    <div id="t-spin-container">
-                        <p>(仮)T-spin</p>
-                    </div>
-                    <div id="back-to-back-container">
-                        <p></p>
-                    </div>
-                    <div id="home-container">
-                        <button id="home-button"><i class="fa-solid fa-house fa-2x"></i></button>
+                    <div id="effect-container">
+                        <div id="combo-container" style="display: none; transform: translateX(100%);">
+                            <p id="combo-text">(仮)combo</p>
+                        </div>
+                        <div id="t-spin-container" style="display: none; transform: translateX(100%);">
+                            <p id="t-spin-text">(仮)t-spin</p>
+                        </div>
+                        <div id="back-to-back-container" style="display: none; transform: translateX(100%);">
+                            <p id="back-to-back-text">(仮)back-to-back</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -122,10 +121,23 @@
                     <canvas id="next-canvas-3" class="next-canvas small"></canvas>
                     <canvas id="next-canvas-4" class="next-canvas small"></canvas>
                     <canvas id="next-canvas-5" class="next-canvas small"></canvas>
+                    <div id="home-container">
+                        <button id="home-button"><i class="fa-solid fa-house fa-2x"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
+    </div> 
+    
+    <div id="game-over" style="display: none;">
+        <div id="game-over-container">
+            <button id="close-button">&times;</button>
+            <h2>GAME OVER</h2>
+            <p>Your Score: <span id="final-score"></span></p>
+            <button id="restart-button">Play Again</button>
+        </div>
     </div>
+    
     
     <script type="module" src="js/main.js"></script>
 </body>
