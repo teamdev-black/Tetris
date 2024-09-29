@@ -97,6 +97,7 @@
 
 ## 開発者
 - [stshf](https://github.com/stshf)
-- 
+- [uki-t66](https://github.com/uki-t66)
+- [yuugineer](https://github.com/yuugineer)
 
 これらの機能への貢献や新しい機能の提案を歓迎します！
