@@ -96,21 +96,22 @@
                             <p id="line">0</p>
                         </div>
                     </div>
-                    <div id="effect-container" style="display: none;">
-                        <div id="combo-container">
+                    <div id="effect-container">
+                        <div id="combo-container" style="display: none; transform: translateX(100%);">
                             <p id="combo-text">(仮)combo</p>
                         </div>
-                        <div id="t-spin-container">
-                            <p>(仮)t-spin</p>
+                        <div id="t-spin-container" style="display: none; transform: translateX(100%);">
+                            <p id="t-spin-text">(仮)t-spin</p>
                         </div>
-                        <div id="tetris-container">
-                            <p>(仮)tetris</p>
+                        <div id="back-to-back-container" style="display: none; transform: translateX(100%);">
+                            <p id="back-to-back-text">(仮)back-to-back</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="center-container">
                 <canvas id="canvas"></canvas>
+                <div id="tetris-effect" class="effect">TETRIS</div>
             </div>
             <div id="right-container">
                 <div id="next-container">
@@ -120,9 +121,10 @@
                     <canvas id="next-canvas-3" class="next-canvas small"></canvas>
                     <canvas id="next-canvas-4" class="next-canvas small"></canvas>
                     <canvas id="next-canvas-5" class="next-canvas small"></canvas>
-                    <div id="home-container"></div>
+                    <div id="home-container">
                         <button id="home-button"><i class="fa-solid fa-house fa-2x"></i></button>
                     </div>
+                </div>
             </div>
         </div>
     </div> 

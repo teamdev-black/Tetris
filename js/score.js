@@ -7,6 +7,11 @@ import { PLAY_SCREEN_WIDTH } from './utils.js';
 let score = 0;
 let level = 1;
 let linesCleared = 0;
+let comboCount = -1; // combo数は-1で初期化
+let beforeTetris = false;
+let beforeTSpin = false;
+let isTetris = false;
+let isTspin = false;
 export let DROP_SPEED = 1000;
 let scoreElement = document.getElementById('score');
 let levelElement = document.getElementById('level');
@@ -37,12 +42,9 @@ export function initLines(){
         line.textContent = linesCleared
 };
 
-export function updateScore(clearedLines) {
-    if (clearedLines === 0) {
-        return;
-    }
+export function updateScore(clearedLines, tSpinFlag, isBackToBack) {
 
-    const scoreIncrement = calculateScoreIncrement(clearedLines);
+    const scoreIncrement = calculateScoreIncrement(clearedLines, tSpinFlag, isBackToBack);
     score += scoreIncrement;
     linesCleared += clearedLines;
     line.textContent = linesCleared //消したライン数をゲーム画面で表示
@@ -52,17 +54,43 @@ export function updateScore(clearedLines) {
     updateLevelDisplay();
 }
 
-
-
-function calculateScoreIncrement(clearedLines) {
+function calculateScoreIncrement(clearedLines, tSpinFlag, isBackToBack) {
     const baseScores = {
+        0: 1,
         1: 100,  // Single
         2: 300,  // Double
         3: 500,  // Triple
         4: 800   // Tetris
     };
 
-    const baseScore = baseScores[clearedLines] || 0;
+    const miniTspinScores = {
+        0: 100, // no line
+        1: 200, // Single
+    }
+    const TspinScores = {
+        0: 400,  // no line
+        1: 800,  // Single
+        2: 1200,  // Double
+        3: 1600,  // Triple
+    };
+
+    let baseScore = 0;
+    switch (tSpinFlag) {
+        case 0:
+            baseScore = baseScores[clearedLines];
+            break;
+        case 1:
+            baseScore = TspinScores[clearedLines];
+            break;
+        case 2:
+            baseScore = miniTspinScores[clearedLines];
+            break;
+    }
+
+    if (isBackToBack) {
+        baseScore *= 1.5;
+    }
+
     return baseScore * level;
 }
 
@@ -150,4 +178,32 @@ function restartGame() {
 function closeGameOver() {
     const gameOverScreen = document.getElementById('game-over');
     gameOverScreen.style.display = 'none'; // ゲームオーバー画面を非表示
+}
+
+
+// Combo数を取得
+export function getComboCount(fullRows) {
+    if (fullRows > 0) comboCount++;
+    else comboCount = -1;
+    return comboCount;
+}
+
+export function setIsTetris(b) {
+    isTetris = b;
+}
+
+export function setIsTspin(b) {
+    isTspin = b;
+}
+
+export function setBeforeTetrisAndTspin(b) {
+    beforeTetris = isTetris;
+    beforeTSpin = isTspin;
+    isTetris = false;
+    isTspin = false;
+}
+
+export function getIsBackToBack() {
+    console.log(beforeTSpin, beforeTetris, isTspin, isTetris);
+    return (beforeTSpin || beforeTetris) && (isTetris || isTspin);
 }

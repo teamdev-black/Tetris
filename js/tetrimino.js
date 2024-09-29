@@ -3,7 +3,8 @@ import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines, getFullLines } from './board.js';
 import { playSound } from './audio.js';
 import { checkTspin, useSpin } from './input.js'
-import { showTSpinEffect } from './renderer.js'
+import { showBackToBackEffect, showComboEffect, showTSpinEffect, showTetrisEffect } from './renderer.js'
+import { getComboCount, getIsBackToBack, setIsTetris, setIsTspin, setBeforeTetrisAndTspin } from './score.js';
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
@@ -148,15 +149,29 @@ export async function lockTetrimino() {
         tSpinFlag = checkTspin();
         console.log(tSpinFlag === 2 ? 'mini-T-spin' : (tSpinFlag === 1 ? 't-spin' : 'no-t-spin'));
     }
+    // Combo判定
+    let comboCount = getComboCount(fullRows);
+    // Back-To-Back 判定
 
     if (fullRows.length === 4) {
         // tetris animation
+        showTetrisEffect();
+        setIsTetris(true);
     } else if (tSpinFlag > 0) {
         showTSpinEffect(tSpinFlag, fullRows.length);
+        setIsTspin(true);
     }
+    // Combo Animation
+    if (comboCount > 0) showComboEffect(comboCount);
+
+    // Back-To-Back Animation
+    let isBackToBack = getIsBackToBack();
+    if (fullRows.length > 0) setBeforeTetrisAndTspin();
+    if (isBackToBack) showBackToBackEffect();
+
     const clearedLines = await clearFullLines(fullRows); // Line消去アニメーション
     resetHoldCount();
-    return clearedLines;  // 追加：クリアした行数を返す
+    return { clearedLines, tSpinFlag, isBackToBack };  
 }
 
 
@@ -168,6 +183,8 @@ export function rotateTetrimino(clockwise = true) {
         currentTetrimino.direction = getRotateDirection(clockwise);
         return true;
     }
+
+    if (currentTetrimino.name === 'O') return false; // O型はsrsしない
 
     // superRotationを試す
     if (superRotation(clockwise)) {
@@ -187,7 +204,6 @@ function getRotateDirection(clockwise) {
 function normalRotation(clockwise) {
     const { name, shape } = currentTetrimino;
 
-    if (name === 'O') return; // O型は回転しない
 
     let newShape = getNormalRotationShape(name, shape, clockwise);
 

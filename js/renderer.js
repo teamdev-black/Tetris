@@ -164,8 +164,6 @@ function drawGhostTetrimino(tetrimino) {
     });
 }
 
-
-
 export function showTSpinEffect(tSpinFlag, deleteRowNum) {
     // tspinの表示文字を取得
     let tSpinType = tSpinFlag === TSPINFLAG ? 'T-SPIN' : 'Mini-T';
@@ -176,14 +174,62 @@ export function showTSpinEffect(tSpinFlag, deleteRowNum) {
     }
 
     // htmlの要素を取得し、文字を変更
-    let tSpinEffect = document.getElementById('t-spin-container')
-    tSpinEffect.innerText = tSpinType + actionType;
+    let tSpinContainer = document.getElementById('t-spin-container');
+    let tSpinText = document.getElementById('t-spin-text');
+    tSpinText.textContent = tSpinType + ' ' + actionType;
 
+    // エフェクトを表示
+    showEffectContainer(tSpinContainer);
+}
+
+
+const tetrisEffect = document.getElementById('tetris-effect');
+
+export function showTetrisEffect() {
+  tetrisEffect.style.display = 'block';
+  tetrisEffect.style.animation = 'none';
+  tetrisEffect.offsetHeight; // リフロー
+  tetrisEffect.style.animation = 'fadeInOut 1.5s ease-in-out';
+  
+  setTimeout(() => {
+    tetrisEffect.style.display = 'none';
+  }, 1500);
+}
+
+
+export function showComboEffect(comboCount) {
+    // htmlの要素を取得し、文字を変更
+    let comboContainer = document.getElementById('combo-container');
+    let comboText = document.getElementById('combo-text');
+    comboText.textContent = String(comboCount) + " Combo";
+
+    // エフェクトを表示
+    showEffectContainer(comboContainer);
+}
+
+export function showBackToBackEffect() {
+    // htmlの要素を取得し、文字を変更
+    let backToBackContainer = document.getElementById('back-to-back-container');
+    let backToBackText = document.getElementById('back-to-back-text');
+    backToBackText.textContent = "Back-To-Back";
+
+    // エフェクトを表示
+    showEffectContainer(backToBackContainer);
+}
+
+// 新しく追加する関数：エフェクトコンテナを表示し、アニメーションを適用する
+function showEffectContainer(container) {
     // 表示
-    tSpinEffect.style.display = 'block';
+    container.style.display = 'flex';
+    
+    // アニメーションクラスを追加
+    container.classList.remove('slide-in');
+    void container.offsetWidth; // リフロー
+    container.classList.add('slide-in');
     
     // 2秒後に非表示にする
     setTimeout(() => {
-        tSpinEffect.style.display = 'none';
+        container.classList.remove('slide-in');
+        container.style.display = 'none';
     }, 2000);
 }
