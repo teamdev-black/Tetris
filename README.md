@@ -89,11 +89,10 @@ https://github.com/user-attachments/assets/d3920670-ffe5-41b5-80dc-1c2757d46152
 このプロジェクトはJavaScript、HTML、CSSを使用しています。貢献するには：
 
 1. リポジトリをフォークする
-2. フィーチャーブランチを作成：`git checkout -b feature/素晴らしい機能`
-3. 変更をコミット：`git commit -m '素晴らしい機能を追加'`
-4. ブランチにプッシュ：`git push origin feature/素晴らしい機能`
+2. フィーチャーブランチを作成：`git checkout -b feature/追加する機能`
+3. 変更をコミット：`git commit -m '新機能を追加'`
+4. ブランチにプッシュ：`git push origin feature/機能名`
 5. プルリクエストを開く
-
 ## 謝辞
 
 - ゲームメカニクスとガイドラインについては[Tetris Wiki](https://tetris.wiki)を参照しました
