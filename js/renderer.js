@@ -198,3 +198,19 @@ export function showTetrisEffect() {
     tetrisEffect.style.display = 'none';
   }, 1500);
 }
+
+
+export function showComboEffect(comboCount) {
+    // htmlの要素を取得し、文字を変更
+    let comboEffect = document.getElementById('combo-container')
+
+    comboEffect.innerText = String(comboCount) + " Combo";
+
+    // 表示
+    comboEffect.style.display = 'block';
+    
+    // 2秒後に非表示にする
+    setTimeout(() => {
+        comboEffect.style.display = 'none';
+    }, 2000);
+}

@@ -7,6 +7,7 @@ import { PLAY_SCREEN_WIDTH } from './utils.js';
 let score = 0;
 let level = 1;
 let linesCleared = 0;
+let comboCount = -1; // combo数は-1で初期化
 export let DROP_SPEED = 1000;
 let scoreElement = document.getElementById('score');
 let levelElement = document.getElementById('level');
@@ -51,8 +52,6 @@ export function updateScore(clearedLines) {
     updateScoreDisplay();
     updateLevelDisplay();
 }
-
-
 
 function calculateScoreIncrement(clearedLines) {
     const baseScores = {
@@ -124,4 +123,10 @@ export function handleGameOver() {
     cancelAnimationFrame(animationId); // アニメーションループを停止
     
     // ゲームオーバー画面を表示
+}
+
+export function getComboCount(fullRows) {
+    if (fullRows > 0) comboCount++;
+    else comboCount = -1;
+    return comboCount;
 }

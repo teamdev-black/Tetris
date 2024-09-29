@@ -3,7 +3,8 @@ import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines, getFullLines } from './board.js';
 import { playSound } from './audio.js';
 import { checkTspin, useSpin } from './input.js'
-import { showTSpinEffect, showTetrisEffect } from './renderer.js'
+import { showComboEffect, showTSpinEffect, showTetrisEffect } from './renderer.js'
+import { getComboCount } from './score.js';
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
@@ -148,6 +149,8 @@ export async function lockTetrimino() {
         tSpinFlag = checkTspin();
         console.log(tSpinFlag === 2 ? 'mini-T-spin' : (tSpinFlag === 1 ? 't-spin' : 'no-t-spin'));
     }
+    // Combo判定
+    let comboCount = getComboCount(fullRows);
 
     if (fullRows.length === 4) {
         // tetris animation
@@ -155,6 +158,9 @@ export async function lockTetrimino() {
     } else if (tSpinFlag > 0) {
         showTSpinEffect(tSpinFlag, fullRows.length);
     }
+    // Combo Animation
+    if (comboCount > 0) showComboEffect(comboCount);
+
     const clearedLines = await clearFullLines(fullRows); // Line消去アニメーション
     resetHoldCount();
     return clearedLines;  // 追加：クリアした行数を返す
