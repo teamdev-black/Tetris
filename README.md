@@ -1,6 +1,7 @@
 # Tetris
 
 クラシックなテトリスゲームをモダンテイストに実装。JavaScriptで構築され、公式テトリスガイドラインに準拠しています。
+[ゲームプレイ](https://teamdev-black.github.io/Tetris/)
 
 https://github.com/user-attachments/assets/d3920670-ffe5-41b5-80dc-1c2757d46152
 
