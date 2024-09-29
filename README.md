@@ -2,9 +2,7 @@
 
 クラシックなテトリスゲームをモダンテイストに実装。JavaScriptで構築され、公式テトリスガイドラインに準拠しています。
 
-https://github.com/user-attachments/assets/c51c27d0-9b39-42dd-80f4-773a88bdc182
-
-
+https://github.com/user-attachments/assets/d3920670-ffe5-41b5-80dc-1c2757d46152
 
 ## 特徴
 
