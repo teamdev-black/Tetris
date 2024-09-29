@@ -34,7 +34,6 @@
 ├── docs
 ├── js
 ├── sounds
-├── .DS_Store
 ├── index.html
 └── README.md
 ```
