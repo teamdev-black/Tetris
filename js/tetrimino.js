@@ -171,7 +171,7 @@ export async function lockTetrimino() {
 
     const clearedLines = await clearFullLines(fullRows); // Line消去アニメーション
     resetHoldCount();
-    return clearedLines;  // 追加：クリアした行数を返す
+    return { clearedLines, tSpinFlag, isBackToBack };  
 }
 
 
