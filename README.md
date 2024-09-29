@@ -80,7 +80,7 @@
 
 ## 開発
 
-このプロジェクトはバニラJavaScript、HTML、CSSを使用しています。貢献するには：
+このプロジェクトはJavaScript、HTML、CSSを使用しています。貢献するには：
 
 1. リポジトリをフォークする
 2. フィーチャーブランチを作成：`git checkout -b feature/素晴らしい機能`
