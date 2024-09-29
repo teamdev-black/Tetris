@@ -164,8 +164,6 @@ function drawGhostTetrimino(tetrimino) {
     });
 }
 
-
-
 export function showTSpinEffect(tSpinFlag, deleteRowNum) {
     // tspinの表示文字を取得
     let tSpinType = tSpinFlag === TSPINFLAG ? 'T-SPIN' : 'Mini-T';
@@ -186,4 +184,17 @@ export function showTSpinEffect(tSpinFlag, deleteRowNum) {
     setTimeout(() => {
         tSpinEffect.style.display = 'none';
     }, 2000);
+}
+
+const tetrisEffect = document.getElementById('tetris-effect');
+
+export function showTetrisEffect() {
+  tetrisEffect.style.display = 'block';
+  tetrisEffect.style.animation = 'none';
+  tetrisEffect.offsetHeight; // リフロー
+  tetrisEffect.style.animation = 'fadeInOut 1s ease-in-out';
+  
+  setTimeout(() => {
+    tetrisEffect.style.display = 'none';
+  }, 1000);
 }

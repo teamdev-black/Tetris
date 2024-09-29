@@ -3,7 +3,7 @@ import { TETRIMINOS, PLAY_SCREEN_HEIGHT, PLAY_SCREEN_WIDTH } from './utils.js';
 import { field, checkCollision, clearFullLines, getFullLines } from './board.js';
 import { playSound } from './audio.js';
 import { checkTspin, useSpin } from './input.js'
-import { showTSpinEffect } from './renderer.js'
+import { showTSpinEffect, showTetrisEffect } from './renderer.js'
 
 export let currentTetrimino = null;
 export let ghostTetriminoRow = null;
@@ -151,6 +151,7 @@ export async function lockTetrimino() {
 
     if (fullRows.length === 4) {
         // tetris animation
+        showTetrisEffect();
     } else if (tSpinFlag > 0) {
         showTSpinEffect(tSpinFlag, fullRows.length);
     }
@@ -168,6 +169,8 @@ export function rotateTetrimino(clockwise = true) {
         currentTetrimino.direction = getRotateDirection(clockwise);
         return true;
     }
+
+    if (currentTetrimino.name === 'O') return false; // O型はsrsしない
 
     // superRotationを試す
     if (superRotation(clockwise)) {
@@ -187,7 +190,6 @@ function getRotateDirection(clockwise) {
 function normalRotation(clockwise) {
     const { name, shape } = currentTetrimino;
 
-    if (name === 'O') return; // O型は回転しない
 
     let newShape = getNormalRotationShape(name, shape, clockwise);
 
