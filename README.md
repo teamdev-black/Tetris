@@ -1,8 +1,10 @@
 # Tetris
 
-クラシックなテトリスゲームの現代的な実装。JavaScriptで構築され、公式テトリスガイドラインに準拠しています。
+クラシックなテトリスゲームをモダンテイストに実装。JavaScriptで構築され、公式テトリスガイドラインに準拠しています。
 
-![テトリスゲームのスクリーンショット](https://github.com/user-attachments/assets/1bf319fe-6564-4289-a5d8-70c2668bdfac)
+https://github.com/user-attachments/assets/c51c27d0-9b39-42dd-80f4-773a88bdc182
+
+
 
 ## 特徴
 
