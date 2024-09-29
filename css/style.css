@@ -395,9 +395,91 @@ h3 {
   margin: 0;
 }
 
+#effect-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /* combo */
-/* t-Spin-effect */
+#combo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 120px;
+  margin-top: 25px;
+  border: 3px solid #ff00ff;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #000000, #333333);
+  box-shadow: 0 0 10px #ff00ff, inset 0 0 5px #ff00ff;
+  position: relative;
+  overflow: hidden;
+  animation: pulse 0.5s ease-in-out infinite;
+}
+
+#combo-container::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    rgba(255, 0, 255, 0.3),
+    transparent 30%
+  );
+  animation: rotate 4s linear infinite;
+}
+
+#combo-text {
+  font-family: "Arial", sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 5px #ff00ff;
+  z-index: 1;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* t-spin */
+#t-spin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 100px;
+  margin-top: 25px;
+  border: 2px solid;
+}
+
 /* tetris */
+#tetris-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 100px;
+  margin-top: 25px;
+  border: 2px solid;
+}
 
 #game-over {
   position: fixed;
