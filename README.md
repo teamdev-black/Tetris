@@ -17,12 +17,17 @@
   - レベル進行に応じたスコアリングシステム
 - モダンなテイストのUI
   - トップ画面
+    ![image](https://github.com/user-attachments/assets/703c1401-38c8-47b5-a186-b4c9e23750c2)
   - ゲーム画面
     - 次のテトリミノ表示（3ピース以上）
     - ホールドミノ表示
     - T-Spin,Mini-T-Spin, Combo, Back-to-Back時のエフェクト表示
     - TETRIS(4列)消し時のエフェクト表示
+    ![image](https://github.com/user-attachments/assets/97592a1d-bc4b-45c1-95a4-99438f8853a1)
+
   - ゲームオーバー画面
+    ![image](https://github.com/user-attachments/assets/166a451a-0370-428c-a088-728e38eadaab)
+
 
 ## ファイル構造
 
