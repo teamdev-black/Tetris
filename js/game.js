@@ -85,10 +85,9 @@ async function normalDrop(currentTime) {
 async function performLock() {
     setIsLocking(true);
 
-    const clearedLines = await lockTetrimino();
-    if (clearedLines > 0) {
-        updateScore(clearedLines);
-    } 
+    const { clearedLines, tSpinFlag, isBackToBack } = await lockTetrimino();
+
+    updateScore(clearedLines, tSpinFlag, isBackToBack);
 
     setIsLocking(false);
     setCurrentTetrimino(null);
