@@ -231,5 +231,5 @@ function showEffectContainer(container) {
     setTimeout(() => {
         container.classList.remove('slide-in');
         container.style.display = 'none';
-    }, 2000);
+    }, 2500);
 }
