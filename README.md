@@ -99,7 +99,9 @@ https://github.com/user-attachments/assets/d3920670-ffe5-41b5-80dc-1c2757d46152
 - ゲームメカニクスとガイドラインについては[Tetris Wiki](https://tetris.wiki)を参照しました
 - 公式ルールと仕様については[テトリスガイドライン](https://tetris.wiki/Tetris_Guideline)を参照しました
 
-## 学んだこと
+## 課題
+- 重複機能があるため、リファクタリング
+- 各機能のクラス化と適切なファイル分割 
 
 ## 開発者
 - [stshf](https://github.com/stshf)
