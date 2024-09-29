@@ -8,6 +8,10 @@ let score = 0;
 let level = 1;
 let linesCleared = 0;
 let comboCount = -1; // combo数は-1で初期化
+let beforeTetris = false;
+let beforeTSpin = false;
+let isTetris = false;
+let isTspin = false;
 export let DROP_SPEED = 1000;
 let scoreElement = document.getElementById('score');
 let levelElement = document.getElementById('level');
@@ -125,8 +129,30 @@ export function handleGameOver() {
     // ゲームオーバー画面を表示
 }
 
+
+// Combo数を取得
 export function getComboCount(fullRows) {
     if (fullRows > 0) comboCount++;
     else comboCount = -1;
     return comboCount;
+}
+
+export function setIsTetris(b) {
+    isTetris = b;
+}
+
+export function setIsTspin(b) {
+    isTspin = b;
+}
+
+export function setBeforeTetrisAndTspin(b) {
+    beforeTetris = isTetris;
+    beforeTSpin = isTspin;
+    isTetris = false;
+    isTspin = false;
+}
+
+export function getIsBackToBack() {
+    console.log(beforeTSpin, beforeTetris, isTspin, isTetris);
+    return (beforeTSpin || beforeTetris) && (isTetris || isTspin);
 }

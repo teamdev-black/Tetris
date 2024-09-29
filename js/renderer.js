@@ -214,3 +214,18 @@ export function showComboEffect(comboCount) {
         comboEffect.style.display = 'none';
     }, 2000);
 }
+
+export function showBackToBackEffect() {
+    // htmlの要素を取得し、文字を変更
+    let backToBackEffect = document.getElementById('back-to-back-container')
+    backToBackEffect.innerText = "Back-To-Back";
+
+
+    // 表示
+    backToBackEffect.style.display = 'block';
+    
+    // 2秒後に非表示にする
+    setTimeout(() => {
+        backToBackEffect.style.display = 'none';
+    }, 2000);
+}
