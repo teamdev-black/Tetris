@@ -192,9 +192,9 @@ export function showTetrisEffect() {
   tetrisEffect.style.display = 'block';
   tetrisEffect.style.animation = 'none';
   tetrisEffect.offsetHeight; // リフロー
-  tetrisEffect.style.animation = 'fadeInOut 1s ease-in-out';
+  tetrisEffect.style.animation = 'fadeInOut 1.5s ease-in-out';
   
   setTimeout(() => {
     tetrisEffect.style.display = 'none';
-  }, 1000);
+  }, 1500);
 }

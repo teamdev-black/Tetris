@@ -400,10 +400,16 @@ h3 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 24px;
+  font-size: 36px;
   font-weight: bold;
-  color: #FFD700;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  font-family: 'Arial Black', sans-serif;
+  color: #00FFFF;
+  text-shadow: 
+    3px 3px 0 #FF00FF,
+    -3px -3px 0 #FFFF00,
+    3px -3px 0 #FF8C00,
+    -3px 3px 0 #00FF00;
+  letter-spacing: 5px;
   display: none;
 }
 
