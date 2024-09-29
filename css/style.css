@@ -394,4 +394,27 @@ h3 {
   margin: 0;
 }
 
-/* t-Spin-effect */
+/* tetris-effect */
+#tetris-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  font-weight: bold;
+  font-family: 'Arial Black', sans-serif;
+  color: #00FFFF;
+  text-shadow: 
+    3px 3px 0 #FF00FF,
+    -3px -3px 0 #FFFF00,
+    3px -3px 0 #FF8C00,
+    -3px 3px 0 #00FF00;
+  letter-spacing: 5px;
+  display: none;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
